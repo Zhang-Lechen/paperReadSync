@@ -1,0 +1,4 @@
+* text=auto
+# Preserve the reviewed patch's mixed newline contexts and the upstream copy hash.
+patches/*.patch -text
+locks/* -text

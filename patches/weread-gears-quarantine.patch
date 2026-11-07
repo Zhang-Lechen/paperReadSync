@@ -1,0 +1,296 @@
+diff --git a/config.example.yaml b/config.example.yaml
+index 65d4ab9..bc908b2 100644
+--- a/config.example.yaml
++++ b/config.example.yaml
+@@ -4,7 +4,7 @@
+ app:
+   name: "weread-auto-reader"
+   version: "1.2.0"
+-  host: "0.0.0.0"
++  host: "127.0.0.1"  # PaperRead Sync: local only; runtime remains quarantined
+   port: 8000
+ 
+ # 阅读设置
+@@ -20,7 +20,7 @@ reading:
+ 
+ # 定时任务
+ schedule:
+-  enabled: true
++  enabled: false  # PaperRead Sync: no automatic reading
+   cron_expression: "0 9,12,18 * * *"
+   times: ["09:00", "12:00", "18:00"]
+   timezone: "Asia/Shanghai"
+@@ -34,7 +34,7 @@ daemon:
+ # 网络设置
+ network:
+   timeout: 30                    # 请求超时（秒）
+-  retry_times: 3                 # 重试次数
++  retry_times: 1                 # PaperRead Sync: one attempt, no retry
+   retry_delay: "5-15"            # 重试延迟（秒）
+   rate_limit: 10                 # 速率限制（次/分钟）
+ 
+diff --git a/src/__init__.py b/src/__init__.py
+index e69de29..1bdfbd2 100644
+--- a/src/__init__.py
++++ b/src/__init__.py
+@@ -0,0 +1,5 @@
++# Modified by PaperRead Sync: the original runtime is an audit-only dependency.
++# Fail before config loading, credentials, browser, scheduler or HTTP imports.
++raise RuntimeError(
++    "PAPERREAD_UPSTREAM_QUARANTINED: use paperread doctor; original runtime disabled"
++)
+diff --git a/src/api_reader.py b/src/api_reader.py
+index 24eb0d5..f554fc7 100644
+--- a/src/api_reader.py
++++ b/src/api_reader.py
+@@ -1,3 +1,4 @@
++# Modified by PaperRead Sync: remove raw first-request/response diagnostics.
+ import asyncio
+ import random
+ import time
+@@ -1020,40 +1021,6 @@ class ApiReader:
+                     continue
+ 
+                 try:
+-                    if not _logged_first:
+-                        _logged_first = True
+-                        logger.info(f"API首次请求: ps={self.data.get('ps','')[:16]} pc={self.data.get('pc','')[:16]} appId={self.data.get('appId','')[:20]}")
+-                        # 诊断:首次请求时 dump 完整 payload + headers,后续再出问题可以对比
+-                        # 不会泄露 secrets(都是自己抓包的,不是用户的)
+-                        try:
+-                            import json as _json
+-                            _payload_dump = {k: v for k, v in self.data.items() if k != "s"}
+-                            logger.info(
+-                                f"[DIAG] 首次请求 payload (signed s 隐藏):\n"
+-                                f"{_json.dumps(_payload_dump, ensure_ascii=False, indent=2)}"
+-                            )
+-                            _TRUNC = "..."
+-                            _hdr_lines = []
+-                            for _k, _v in self.headers.items():
+-                                _v_str = str(_v)
+-                                _v_show = _v_str[:60] + _TRUNC if len(_v_str) > 60 else _v_str
+-                                _hdr_lines.append(f"  {_k}: {_v_show}")
+-                            logger.info(
+-                                f"[DIAG] 首次请求 headers ({len(self.headers)} 个):\n"
+-                                f"{chr(10).join(_hdr_lines)}"
+-                            )
+-                            _ck_lines = []
+-                            for _k, _v in self.cookies.items():
+-                                _v_str = str(_v)
+-                                _v_show = _v_str[:30] + _TRUNC if len(_v_str) > 30 else _v_str
+-                                _ck_lines.append(f"  {_k}={_v_show}")
+-                            logger.info(
+-                                f"[DIAG] 首次请求 cookies ({len(self.cookies)} 个):\n"
+-                                f"{chr(10).join(_ck_lines)}"
+-                            )
+-                        except Exception as _e:
+-                            logger.debug(f"payload dump 失败(非致命): {_e}")
+-
+                     response, _ = await self.http_client.post(
+                         self.READ_URL,
+                         headers=self.headers,
+@@ -1062,12 +1029,6 @@ class ApiReader:
+                     )
+ 
+                     check_result = await self._check_response(response)
+-                    # 2026-06-23 DEBUG: 打印完整响应,排查"成功但不计入微信读"问题
+-                    try:
+-                        _resp_body = response.text[:300]
+-                        logger.info(f"[DIAG-RESP] ci={self.data.get('ci')} pr={self.data.get('pr')} co={self.data.get('co')} rt={self.data.get('rt')} → {len(response.text)}B: {_resp_body}")
+-                    except Exception as _e:
+-                        logger.debug(f"resp dump 失败: {_e}")
+                     if check_result is True:
+                         self.total_reads += 1
+                         last_time = int(time.time())
+diff --git a/src/config.py b/src/config.py
+index b0e9d24..ddab7e2 100644
+--- a/src/config.py
++++ b/src/config.py
+@@ -1,3 +1,4 @@
++# Modified by PaperRead Sync: safe defaults; runtime is quarantined.
+ import os
+ import yaml
+ from pathlib import Path
+@@ -80,9 +81,9 @@ class Config:
+             "app": {
+                 "name": "WeReadGears",
+                 "version": "1.0.0",
+-                "host": "0.0.0.0",
++                "host": "127.0.0.1",
+                 "port": 8000,
+-                "startup_mode": "immediate",
++                "startup_mode": "idle",
+                 "startup_delay": "1-10",
+             },
+             "reading": {
+@@ -97,7 +98,7 @@ class Config:
+             },
+             "users": [],
+             "schedule": {
+-                "enabled": True,
++                "enabled": False,
+                 "cron_expression": "0 */2 * * *",
+                 "timezone": "Asia/Shanghai"
+             },
+@@ -107,10 +108,10 @@ class Config:
+                 "max_daily_sessions": 12
+             },
+             "notification": {
+-                "enabled": True,
++                "enabled": False,
+                 "include_statistics": True,
+                 "only_on_failure": False,
+-                "weekly_reward_reminder": True,
++                "weekly_reward_reminder": False,
+                 # 每周奖励提醒:星期几(0=周一 ... 6=周日)和时间(HH:MM,24h)
+                 # 默认 周日 10:00 — 微信读书周奖励在周日 23:59 截止,留出时间领取
+                 "weekly_reward_day": 6,
+@@ -175,12 +176,12 @@ class Config:
+             },
+             "network": {
+                 "timeout": 30,
+-                "retry_times": 3,
++                "retry_times": 1,
+                 "retry_delay": "5-15",
+                 "rate_limit": 10
+             },
+             "human_simulation": {
+-                "enabled": True,
++                "enabled": False,
+                 "rotate_user_agent": False,
+                 "user_agents": [
+                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+diff --git a/src/credential_manager.py b/src/credential_manager.py
+index 669ce20..e231ddb 100644
+--- a/src/credential_manager.py
++++ b/src/credential_manager.py
+@@ -1,3 +1,4 @@
++# Modified by PaperRead Sync: never expose credential user_info in diagnostics.
+ import json
+ import os
+ from pathlib import Path
+@@ -44,7 +45,6 @@ class CredentialManager:
+         return {
+             "saved_at": cred.saved_at or "未知",
+             "expires_at": cred.expires_at or "未知",
+-            "user_info": str(cred.user_info),
+         }
+ 
+ 
+diff --git a/src/main.py b/src/main.py
+index 90889e9..7741795 100644
+--- a/src/main.py
++++ b/src/main.py
+@@ -1,3 +1,6 @@
++# Modified by PaperRead Sync: prevent direct script execution before imports.
++raise RuntimeError("PAPERREAD_UPSTREAM_QUARANTINED: original entry point disabled")
++
+ import sys
+ import asyncio
+ import signal
+diff --git a/src/utils/logger.py b/src/utils/logger.py
+index d28b6a9..c7e3fc3 100644
+--- a/src/utils/logger.py
++++ b/src/utils/logger.py
+@@ -1,92 +1,19 @@
+-import logging
+-import sys
+-from pathlib import Path
+-from logging.handlers import RotatingFileHandler
+-from datetime import datetime
+-
++# Modified by PaperRead Sync: disable all upstream logging before any login.
++# Do not forward strings, format arguments, exception traces, or reprs to sinks.
++# The upstream runtime itself is quarantined by src/__init__.py and src/main.py.
+ 
+ class Logger:
+-    _instance = None
+-
+-    def __new__(cls):
+-        if cls._instance is None:
+-            cls._instance = super().__new__(cls)
+-            cls._instance._initialized = False
+-        return cls._instance
+-
+-    def __init__(self):
+-        if self._initialized:
+-            return
+-        self._initialized = True
+-        self._logger = None
+-
+-    def setup(self, name: str, log_file: str = None, level: str = "INFO"):
+-        self._logger = logging.getLogger(name)
+-        self._logger.setLevel(getattr(logging, level.upper(), logging.INFO))
+-
+-        formatter = logging.Formatter(
+-            fmt="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+-            datefmt="%Y-%m-%d %H:%M:%S"
+-        )
+-
+-        # 始终确保 console handler 存在(可能 logger 已被别的模块提前 setup 过)
+-        has_console = any(
+-            isinstance(h, logging.StreamHandler) and not isinstance(h, logging.FileHandler)
+-            and getattr(h, "stream", None) is sys.stdout
+-            for h in self._logger.handlers
+-        )
+-        if not has_console:
+-            console_handler = logging.StreamHandler(sys.stdout)
+-            console_handler.setFormatter(formatter)
+-            self._logger.addHandler(console_handler)
+-
+-        # 始终确保 file handler 存在(关键修复:即使 logger 已初始化,后续 setup 也要加 file handler)
+-        if log_file:
+-            # 转绝对路径:避免容器 cwd 不一致导致日志写错地方
+-            log_path = Path(log_file).resolve()
+-            log_path.parent.mkdir(parents=True, exist_ok=True)
+-            abs_log_file = str(log_path)
+-            has_file = any(
+-                isinstance(h, RotatingFileHandler)
+-                and getattr(h, "baseFilename", "") == abs_log_file
+-                for h in self._logger.handlers
+-            )
+-            if not has_file:
+-                file_handler = RotatingFileHandler(
+-                    str(log_path),
+-                    maxBytes=10 * 1024 * 1024,
+-                    backupCount=5,
+-                    encoding="utf-8"
+-                )
+-                file_handler.setFormatter(formatter)
+-                self._logger.addHandler(file_handler)
+-                # 让所有早期 logger.info() 也写到文件:通知 root logger 一次
+-                _root = logging.getLogger()
+-                if not any(getattr(h, "baseFilename", "") == abs_log_file for h in _root.handlers):
+-                    _root.addHandler(file_handler)
+-
+-        return self._logger
++    def setup(self, *args, **kwargs):
++        return self
+ 
+     @property
+     def logger(self):
+-        if self._logger is None:
+-            self.setup("WeReadGears")
+-        return self._logger
+-
+-    def debug(self, msg, *args, **kwargs):
+-        self.logger.debug(msg, *args, **kwargs)
+-
+-    def info(self, msg, *args, **kwargs):
+-        self.logger.info(msg, *args, **kwargs)
+-
+-    def warning(self, msg, *args, **kwargs):
+-        self.logger.warning(msg, *args, **kwargs)
++        return self
+ 
+-    def error(self, msg, *args, **kwargs):
+-        self.logger.error(msg, *args, **kwargs)
++    def _discard(self, *args, **kwargs):
++        return None
+ 
+-    def critical(self, msg, *args, **kwargs):
+-        self.logger.critical(msg, *args, **kwargs)
++    debug = info = warning = error = critical = exception = log = _discard
+ 
+ 
+ logger = Logger()

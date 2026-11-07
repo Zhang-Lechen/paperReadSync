@@ -1,0 +1,33 @@
+{
+  "captured_at": "2026-10-23T11:34:52.354517+08:00",
+  "timezone": "Asia/Shanghai",
+  "python_version": "3.12.4",
+  "real_account_verification": "NOT_RUN",
+  "credentials_loaded_by_application": false,
+  "checks": [
+    {
+      "command": ".venv\\Scripts\\python -m pytest -q",
+      "exit_code": 0,
+      "stdout": ".....................................................                    [100%]\n53 passed in 3.18s",
+      "stderr": ""
+    },
+    {
+      "command": ".venv\\Scripts\\python -m paperread doctor",
+      "exit_code": 0,
+      "stdout": "{\n  \"phase\": 0,\n  \"mode\": \"offline\",\n  \"live_writes_enabled\": false,\n  \"schedule_enabled\": false,\n  \"daemon_enabled\": false,\n  \"browser_fallback\": false,\n  \"automatic_retry\": false,\n  \"remote_verification\": \"NOT_RUN\",\n  \"upstreams\": [\n    {\n      \"name\": \"WeReadGears\",\n      \"commit\": \"a3ab77bd767c73e6cca367e6ea95b4d9e98d465c\",\n      \"status\": \"PASS\"\n    },\n    {\n      \"name\": \"WeChatReading\",\n      \"commit\": \"d98e66ee60a8c7bcd35da549d0643c4470439643\",\n      \"status\": \"PASS\"\n    }\n  ]\n}",
+      "stderr": ""
+    },
+    {
+      "command": ".venv\\Scripts\\python scripts/bootstrap_upstream.py",
+      "exit_code": 0,
+      "stdout": "WeReadGears: PASS (pinned and isolated)\nWeChatReading: PASS (pinned and isolated)",
+      "stderr": ""
+    },
+    {
+      "command": ".venv\\Scripts\\python -m pip check",
+      "exit_code": 0,
+      "stdout": "No broken requirements found.",
+      "stderr": ""
+    }
+  ]
+}

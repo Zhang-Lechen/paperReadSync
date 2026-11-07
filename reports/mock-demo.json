@@ -1,0 +1,15 @@
+{
+  "source": "mock",
+  "real_account_verification": "NOT_RUN",
+  "captured_at": "2026-11-05T12:12:39.110533+00:00",
+  "entry_id": "647c9777-79ba-4dcb-9d44-fd6c1e8a77df",
+  "paper_date": "2026-10-22",
+  "duration_seconds": 3600,
+  "probe_verified_seconds": 60,
+  "remaining_after_probe": 3540,
+  "final_synthetic_verified_seconds": 3600,
+  "attempt_count": 60,
+  "total_authorized_seconds": 3600,
+  "final_status": "MOCK_VERIFIED",
+  "repeated_submit_network_writes": 0
+}

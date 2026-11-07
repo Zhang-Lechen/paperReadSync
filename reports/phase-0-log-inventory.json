@@ -1,0 +1,2828 @@
+{
+  "scope": "pinned original WeReadGears src/**/*.py; static AST inventory only",
+  "commit": "a3ab77bd767c73e6cca367e6ea95b4d9e98d465c",
+  "total_calls": 470,
+  "dynamic_message_calls": 379,
+  "calls": [
+    {
+      "path": "src/api_reader.py",
+      "line": 264,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 270,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 296,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 424,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 431,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 439,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 456,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 484,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 492,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 497,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 529,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 537,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 546,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 550,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 561,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 647,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 664,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 686,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 688,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 690,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 691,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 696,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 713,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 727,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 729,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 731,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 759,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 764,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 772,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 785,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 794,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 801,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 815,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 819,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 845,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 848,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 850,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 852,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 859,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 871,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 886,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 915,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 927,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 938,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 945,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 963,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1000,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1013,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1025,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1031,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1041,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1050,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1055,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1068,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1070,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1087,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1105,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1118,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1140,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1146,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1155,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1161,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1169,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1174,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1181,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1213,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1227,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1242,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1272,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1281,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1289,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1319,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1332,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1360,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1364,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1375,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1379,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1386,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1392,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1402,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1413,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1418,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1452,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1469,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1477,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1484,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1486,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1496,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1501,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1506,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1511,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1515,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1530,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1539,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1549,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1553,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1589,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1593,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1604,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1609,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1632,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1664,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1670,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1679,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1686,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1714,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1727,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1731,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1733,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1783,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/api_reader.py",
+      "line": 1806,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 73,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 75,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 130,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 133,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 144,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 172,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 191,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 249,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 278,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 286,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 293,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 310,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 342,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 357,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 363,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 367,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 370,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 376,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 460,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 464,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 474,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 479,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 493,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 506,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 565,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 568,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 576,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 612,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 640,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 656,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 659,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 673,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 676,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 695,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 701,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 710,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 777,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 779,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 784,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 796,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 853,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 862,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 870,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 992,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 994,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1000,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1003,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1029,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1310,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1324,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1328,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1333,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1340,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1410,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1423,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1427,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1440,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1468,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1541,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1563,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1582,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1585,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1588,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1632,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1703,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1706,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1711,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1716,
+      "call": "logger.debug",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1722,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1729,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1761,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1779,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1813,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1818,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1821,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1876,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1880,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1920,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1952,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1972,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1980,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1989,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/browser.py",
+      "line": 1994,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2020,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2052,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2063,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2121,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2131,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2143,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2152,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2184,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2200,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2223,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2228,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/browser.py",
+      "line": 2252,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/config.py",
+      "line": 65,
+      "call": "logging.getLogger('src.config').warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/config.py",
+      "line": 65,
+      "call": "logging.getLogger",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/config.py",
+      "line": 317,
+      "call": "_logger.setup",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/config.py",
+      "line": 319,
+      "call": "_logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/config.py",
+      "line": 322,
+      "call": "print",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/cookie_manager.py",
+      "line": 32,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/cookie_manager.py",
+      "line": 44,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/cookie_manager.py",
+      "line": 48,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/cookie_manager.py",
+      "line": 59,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/cookie_manager.py",
+      "line": 61,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/cookie_manager.py",
+      "line": 66,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/cookie_manager.py",
+      "line": 68,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/curl_parser.py",
+      "line": 8,
+      "call": "logging.getLogger",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/curl_parser.py",
+      "line": 97,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/curl_parser.py",
+      "line": 374,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/curl_parser.py",
+      "line": 394,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/curl_parser.py",
+      "line": 397,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/curl_parser.py",
+      "line": 418,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/curl_parser.py",
+      "line": 424,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 45,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 53,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 73,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 79,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 81,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 84,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 89,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 92,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 107,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 110,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/daemon.py",
+      "line": 114,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/history_manager.py",
+      "line": 28,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/history_manager.py",
+      "line": 37,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/history_manager.py",
+      "line": 74,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/history_manager.py",
+      "line": 77,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/history_manager.py",
+      "line": 289,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/history_manager.py",
+      "line": 292,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/http_client.py",
+      "line": 109,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/http_client.py",
+      "line": 119,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/http_client.py",
+      "line": 128,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 64,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 66,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 71,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 80,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 104,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 106,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 127,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 154,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 163,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 169,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 171,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 174,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 181,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 213,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 216,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 222,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 259,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 261,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 263,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 265,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 268,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 273,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 280,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 287,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 296,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 297,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 298,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 299,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 302,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 303,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 304,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 310,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 312,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 316,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 335,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 340,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 345,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 348,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 353,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 360,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 364,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/main.py",
+      "line": 366,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/main.py",
+      "line": 370,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 59,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 64,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 70,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 97,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 99,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 104,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 128,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 133,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 159,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 164,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 190,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 195,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 221,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 226,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 249,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 254,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 277,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 282,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 306,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 311,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 332,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 337,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 357,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 362,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 379,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 467,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 471,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 476,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 485,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 488,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 491,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/notifier.py",
+      "line": 493,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 41,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 48,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 52,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 75,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 80,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 85,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 185,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 204,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 209,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 215,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 217,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 219,
+      "call": "logger.error",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 230,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 236,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 242,
+      "call": "logger.error",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 247,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 286,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/reader.py",
+      "line": 304,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 311,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 313,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 329,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 336,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 349,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 362,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 377,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/reader.py",
+      "line": 380,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 26,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 80,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 83,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 94,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 96,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 109,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 116,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 120,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 127,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 129,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 143,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 157,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 162,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 171,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 178,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 192,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 203,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/run_mode_manager.py",
+      "line": 207,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 78,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 82,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 121,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 130,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 134,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 138,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 142,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 146,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 150,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 155,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 171,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 173,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 201,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 205,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/scheduler.py",
+      "line": 214,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 62,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 70,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 84,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 129,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 137,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 140,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 145,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 147,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 150,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 213,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 229,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 231,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 256,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 279,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 310,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 315,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 317,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 327,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/session_manager.py",
+      "line": 331,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 77,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 80,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 106,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 113,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 127,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 130,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 196,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 199,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 214,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 218,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 223,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 230,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 250,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 253,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 263,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 266,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 283,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 299,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 302,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 324,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 328,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 351,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 358,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 362,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 387,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 389,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 395,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 397,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 404,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/user_data_manager.py",
+      "line": 406,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 24,
+      "call": "logging.getLogger",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 25,
+      "call": "self._logger.setLevel",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 27,
+      "call": "logging.Formatter",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 39,
+      "call": "logging.StreamHandler",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 41,
+      "call": "self._logger.addHandler",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 62,
+      "call": "self._logger.addHandler",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 64,
+      "call": "logging.getLogger",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 77,
+      "call": "self.logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 80,
+      "call": "self.logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 83,
+      "call": "self.logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 86,
+      "call": "self.logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/utils/logger.py",
+      "line": 89,
+      "call": "self.logger.critical",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 44,
+      "call": "logger.setup",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 45,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 49,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 52,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 343,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 359,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 362,
+      "call": "logger.info",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 364,
+      "call": "logger.error",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 392,
+      "call": "logger.exception",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 431,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 444,
+      "call": "logger.exception",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 494,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 505,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 518,
+      "call": "logger.warning",
+      "dynamic_message": false
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 645,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 783,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 793,
+      "call": "logger.exception",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 839,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1147,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1183,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1319,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1334,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1345,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1352,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1354,
+      "call": "logger.debug",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1395,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1397,
+      "call": "logger.warning",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1518,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1521,
+      "call": "logger.info",
+      "dynamic_message": true
+    },
+    {
+      "path": "src/web/app.py",
+      "line": 1523,
+      "call": "logger.warning",
+      "dynamic_message": true
+    }
+  ]
+}

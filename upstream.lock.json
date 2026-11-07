@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-10-23",
+  "official_skill_version": "1.0.5",
+  "repositories": [
+    {
+      "name": "WeReadGears",
+      "url": "https://github.com/GaviZhao/WeReadGears.git",
+      "commit": "a3ab77bd767c73e6cca367e6ea95b4d9e98d465c",
+      "patch": "patches/weread-gears-quarantine.patch",
+      "patch_sha256": "be1122a859868d98d4ce1ddfa5f10adf6774bbd411d54e9da917db60afb74192"
+    },
+    {
+      "name": "WeChatReading",
+      "url": "https://github.com/Tencent/WeChatReading.git",
+      "commit": "d98e66ee60a8c7bcd35da549d0643c4470439643",
+      "patch": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstream_requirements_sha256": "d5a56609efbfdabb343439cb585f5188d53fadf8ee60f4700b3082f18965e482",
+  "runtime_policy": "quarantined; upstream dependencies not installed"
+}

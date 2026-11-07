@@ -1,0 +1,35 @@
+{
+  "captured_at": "2026-11-05T20:11:16.221877+08:00",
+  "scope": "Initial expiry responses were injected locally; renewal, post-renewal validation and reloaded-credential checks used the real official HTTPS endpoints.",
+  "status": "RENEWED",
+  "reloaded_profile_status": "VALID",
+  "shared_browser_status": "VALID",
+  "identity_unchanged": true,
+  "book_context_unchanged": true,
+  "ledger_unchanged": true,
+  "real_reading_requests": 0,
+  "injected_expiry_checks": 1,
+  "real_auth_requests": [
+    {
+      "method": "POST",
+      "path": "/web/login/renewal",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/web/getConfig",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/web/getConfig",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/web/getConfig",
+      "http_status": 200
+    }
+  ],
+  "limitation": "Single renewal and reload verified; no days/weeks longevity claim."
+}

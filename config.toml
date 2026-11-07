@@ -1,0 +1,13 @@
+# Offline defaults. Only an explicit command may enable official reads/live probe.
+# No upstream runtime, scheduler, daemon, automatic retries, or browser fallback.
+[safety]
+mode = "offline"
+live_writes_enabled = false
+automatic_retry = false
+browser_fallback = false
+
+[schedule]
+enabled = false
+
+[daemon]
+enabled = false

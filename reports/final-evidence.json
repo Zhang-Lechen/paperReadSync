@@ -1,0 +1,46 @@
+{
+  "captured_at": "2026-11-05T20:11:37.063325+08:00",
+  "evidence_scope": "This local check run only; real account attempts and outcomes are in reports/live-probe.md",
+  "python_version": "3.12.4",
+  "real_account_verification": "NOT_RUN",
+  "real_reading_seconds_submitted": 0,
+  "checks": [
+    {
+      "command": ".venv\\Scripts\\python -m pytest -q",
+      "exit_code": 0,
+      "stdout": "........................................................................ [ 27%]\n........................................................................ [ 54%]\n........................................................................ [ 82%]\n...............................................                          [100%]\n263 passed in 48.40s",
+      "stderr": ""
+    },
+    {
+      "command": ".venv\\Scripts\\python -m compileall -q paperread scripts",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": ".venv\\Scripts\\python -m paperread doctor",
+      "exit_code": 0,
+      "stdout": "{\n  \"phase\": \"integration\",\n  \"software_version\": \"0.2.0\",\n  \"mode\": \"offline\",\n  \"live_writes_enabled\": false,\n  \"explicit_live_probe_available\": true,\n  \"schedule_enabled\": false,\n  \"daemon_enabled\": false,\n  \"browser_fallback\": false,\n  \"automatic_retry\": false,\n  \"remote_verification\": \"NOT_RUN\",\n  \"upstreams\": [\n    {\n      \"name\": \"WeReadGears\",\n      \"commit\": \"a3ab77bd767c73e6cca367e6ea95b4d9e98d465c\",\n      \"status\": \"PASS\"\n    },\n    {\n      \"name\": \"WeChatReading\",\n      \"commit\": \"d98e66ee60a8c7bcd35da549d0643c4470439643\",\n      \"status\": \"PASS\"\n    }\n  ]\n}",
+      "stderr": ""
+    },
+    {
+      "command": ".venv\\Scripts\\python -m pip check",
+      "exit_code": 0,
+      "stdout": "No broken requirements found.",
+      "stderr": ""
+    },
+    {
+      "command": ".venv\\Scripts\\python scripts/mock_demo.py",
+      "exit_code": 0,
+      "stdout": "{\n  \"source\": \"mock\",\n  \"real_account_verification\": \"NOT_RUN\",\n  \"captured_at\": \"2026-11-05T12:12:39.110533+00:00\",\n  \"entry_id\": \"647c9777-79ba-4dcb-9d44-fd6c1e8a77df\",\n  \"paper_date\": \"2026-10-22\",\n  \"duration_seconds\": 3600,\n  \"probe_verified_seconds\": 60,\n  \"remaining_after_probe\": 3540,\n  \"final_synthetic_verified_seconds\": 3600,\n  \"attempt_count\": 60,\n  \"total_authorized_seconds\": 3600,\n  \"final_status\": \"MOCK_VERIFIED\",\n  \"repeated_submit_network_writes\": 0\n}",
+      "stderr": ""
+    }
+  ],
+  "sensitive_format_scan": {
+    "status": "PASS",
+    "checked_text_files": 110,
+    "scope": "Git-visible project artifacts; ignored credentials/data/vendor/venv never read",
+    "findings": [],
+    "limitations": "Format scan cannot identify arbitrary unmarked secret strings; synthetic canary tests provide additional coverage."
+  }
+}
