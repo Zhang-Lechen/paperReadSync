@@ -131,6 +131,12 @@ def create_app(settings, *, origin="http://127.0.0.1:8765", operations=None):
             query = request.query_params.get("query", query)[:500]
             if query:
                 candidates = [book for book in candidates if query.casefold() in book.title.casefold()]
+            shelf_cache = db.shelf_candidates(settings.account)
+            shelf_loaded = shelf_cache is not None
+            shelf_books = shelf_cache or []
+            shelf_query = request.query_params.get("shelf_query", "")[:500].strip()
+            if shelf_query:
+                shelf_books = [book for book in shelf_books if shelf_query.casefold() in book.title.casefold()]
         ledger_filter = request.query_params.get("ledger", "unfinished")
         if ledger_filter not in {"unfinished", "completed", "all"}:
             ledger_filter = "unfinished"
@@ -149,6 +155,8 @@ def create_app(settings, *, origin="http://127.0.0.1:8765", operations=None):
                 "review_missing":"请先对照手机核对显示的时长，再勾选确认。"}.get(request.query_params.get("notice")),
             "review_entry":request.query_params.get("entry"),
             "search_open":request.query_params.get("search")=="1",
+            "shelf_open":request.query_params.get("shelf")=="1",
+            "shelf_books":shelf_books,"shelf_loaded":shelf_loaded,"shelf_query":shelf_query,
             "candidates":candidates,"query":query,"jobs":jobs,
             "active_jobs":[job for job in jobs if job["state"] in {"RUNNING", "QUEUED"}],
             "history_jobs":[job for job in jobs if job["state"] not in {"RUNNING", "QUEUED"}]})
@@ -256,7 +264,7 @@ def create_app(settings, *, origin="http://127.0.0.1:8765", operations=None):
                     identifier=""
                 notice="review_changed" if exc.code=="REVIEW_CHANGED" else "review_missing"
                 return RedirectResponse("/?"+urlencode({"notice":notice,"entry":identifier})+"#review-"+identifier,status_code=303)
-            if action in {"search", "book"} and exc.code in {"READ_LOGIN_REQUIRED", "LOCAL_LOGIN_REQUIRED"}:
+            if action in {"search", "shelf", "book"} and exc.code in {"READ_LOGIN_REQUIRED", "LOCAL_LOGIN_REQUIRED"}:
                 params = {"notice":"read_key_required"}
                 if action == "search":
                     params["query"] = value.get("query", "")[:500]
@@ -271,6 +279,8 @@ def create_app(settings, *, origin="http://127.0.0.1:8765", operations=None):
         if not isinstance(result,str):
             if action=="search":
                 destination="/?search=1#book-search"
+            elif action=="shelf":
+                destination="/?shelf=1#book-shelf"
             elif action in {"book-remove", "book-restore"}:
                 destination="/#book-management"
             elif action=="attest" and isinstance(result,dict) and result.get("status")=="READY":

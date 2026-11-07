@@ -14,7 +14,7 @@ from paperread.errors import AppError
 from paperread.models import Book, StatsPair, utc_now
 
 GATEWAY = "https://i.weread.qq.com/api/agent/gateway"
-READ_APIS = {"/store/search", "/book/info", "/book/getprogress", "/readdata/detail"}
+READ_APIS = {"/store/search", "/shelf/sync", "/book/info", "/book/getprogress", "/readdata/detail"}
 
 
 class OfficialStats:
@@ -106,6 +106,27 @@ class OfficialStats:
         return Book(book_id=value.get("bookId"), title=value.get("title"), author=value.get("author"),
                     translator=value.get("translator") or "", publisher=value.get("publisher") or "",
                     isbn=value.get("isbn") or "", origin="official", reader_link=value.get("readerLink") or "")
+
+    def shelf(self) -> list[Book]:
+        # Only books[] can participate in book-specific reading sessions.
+        # The documented response has no reliable imported-book type flag.
+        values = self.request("/shelf/sync").get("books")
+        if not isinstance(values, list):
+            raise AppError("READ_SCHEMA", "书架返回缺少书籍列表")
+        found = {}
+        try:
+            for value in values:
+                book = self._book({**value, "author": value.get("author") or "作者未提供"})
+                found[book.book_id] = book.model_copy(update={"discovery_source": "shelf"})
+        except (AttributeError, TypeError, ValidationError):
+            raise AppError("READ_SCHEMA", "书架书籍缺少必要字段") from None
+        return list(found.values())
+
+    def shelf_book(self, book_id: str) -> Book:
+        for book in self.shelf():
+            if book.book_id == book_id:
+                return book
+        raise AppError("BOOK_NOT_FOUND", "当前账号书架中未找到这本书，请刷新书架后重新选择")
 
     def book_info(self, book_id: str) -> Book:
         try:

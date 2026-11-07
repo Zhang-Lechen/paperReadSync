@@ -41,6 +41,7 @@ class Book(Model):
     confirmed_by_user: bool = False
     confirmed_at: str | None = None
     origin: Literal["official", "manual", "mock"] = "manual"
+    discovery_source: Literal["catalog", "shelf"] = "catalog"
     reader_link: str = Field(default="", max_length=2048)
 
 

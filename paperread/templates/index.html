@@ -1,6 +1,25 @@
 <!doctype html>
 {% macro hidden(entry_id='') %}<input type="hidden" name="csrf" value="{{ csrf }}">{% if entry_id %}<input type="hidden" name="entry_id" value="{{ entry_id }}">{% endif %}{% endmacro %}
 {% macro duration(seconds) %}{% if seconds >= 3600 %}{{ seconds // 3600 }} 小时 {% endif %}{{ (seconds % 3600) // 60 }} 分 {{ seconds % 60 }} 秒{% endmacro %}
+{% macro book_candidates(items) %}
+<div class="table-wrap"><table>
+  <thead><tr><th>书籍与作者</th><th>版本</th><th>确认对应关系</th></tr></thead>
+  <tbody>{% for book in items %}
+    <tr>
+      <td><strong>{{ book.title }}</strong><small>{{ book.author }} · {{ book.book_id }}</small></td>
+      <td>{{ book.translator or '译者未提供' }}<small>{{ book.publisher or '出版社未提供' }}<br>{{ book.isbn }}</small></td>
+      <td><form method="post" action="/action/book">
+        {{ hidden() }}
+        <input type="hidden" name="book_id" value="{{ book.book_id }}">
+        <input type="hidden" name="source" value="{{ book.discovery_source }}">
+        <label class="check"><input required type="checkbox" name="confirmed" value="yes">我已核对作者和版本</label>
+        <label class="check"><input type="checkbox" name="corresponding" value="yes" {% if book.discovery_source == 'shelf' and not (book.translator or book.publisher or book.isbn) %}required{% endif %}>作为对应电子版</label>
+        <button class="quiet">选择并绑定此版本</button>
+      </form></td>
+    </tr>
+  {% endfor %}</tbody>
+</table></div>
+{% endmacro %}
 {% macro activity_checks() %}<label class="check"><input required type="checkbox" name="no_other_reading" value="yes">已暂停同账号在其他设备的阅读、听书和自动化</label><label class="check"><input required type="checkbox" name="same_day_confirmed" value="yes">已确认按当前服务器自然日同步，不要求补写历史日桶</label>{% endmacro %}
 {% macro app_fields(title) %}<label>App 显示精度<select name="app_unit"><option value="minutes">手机显示小时/分钟：按总分钟填写</option><option value="seconds">显示精确秒数：按秒填写</option></select></label><div class="two"><label>手机 App 中《{{ title }}》这一本书的累计阅读时长<input required type="number" min="0" step="1" name="app_book_seconds"></label><label>手机 App 中本月所有书的总阅读时长<input required type="number" min="0" step="1" name="app_period_seconds"></label></div><p class="hint">整分钟模式只对照 API 向下取整后的展示值；实际归属额度始终使用精确 API 秒数，不放宽服务器增量核验。</p>{% endmacro %}
 {% macro write_form(action,row,grant) %}<form method="post" action="/action/{{ action }}">{{ hidden(row.entry_id) }}<input type="hidden" name="grant" value="{{ grant.token }}"><input type="hidden" name="review_in_write" value="yes"><input type="hidden" name="review_snapshot" value="{{ row.baseline_id }}"><p>书籍：<strong>{{ row.title }}</strong> · 官方 ID {{ row.book_id }}<br>实际纸质日期 {{ row.reading_date }} · 总计 {{ row.duration_seconds }} 秒 · 本次最多 <strong>{{ grant.seconds }} 秒</strong></p>{% if row.baseline %}<p>请对照手机：本书历史累计 {{ duration(row.baseline.book_seconds) }}；本月所有书累计 {{ duration(row.baseline.period_seconds) }}。</p>{% endif %}<label class="check"><input required type="checkbox" name="actual_reading" value="yes">这条记录是我确实完成的纸质阅读</label><label class="check"><input required type="checkbox" name="same_account" value="yes">API Key、浏览器登录和 App 属于同一账号</label>{{ activity_checks() }}<label class="check"><input required type="checkbox" name="live" value="yes">启用真实写入（--live）</label><label class="check"><input required type="checkbox" name="confirm" value="yes">我已核对上方时长与手机显示相符，并确认本次书籍与额度（--confirm）</label><label>再次输入 <strong>{{ grant.phrase }}</strong><input required name="phrase" autocomplete="off" placeholder="{{ grant.phrase }}"></label><button {% if grant.seconds <= 0 or row.write_pending  %}disabled{% endif %}>{% if action=='probe' %}确认本次最多 {{ grant.seconds }} 秒试验{% else %}确认提交剩余 {{ grant.seconds }} 秒{% endif %}</button></form>{% endmacro %}
@@ -10,10 +29,34 @@
 {% if job_expired_notice %}<aside>页面已更新，旧任务的结果请在下方阅读记录查看。记录和待处理的试验没有丢失。</aside>{% endif %}{% if review_notice %}<aside>{{ review_notice }}</aside>{% endif %}
 {% if mock %}<p class="mode-note">合成演示：不联网，所有读数均为测试数据。</p>
 {% else %}<p class="mode-note">当前上报方式按实际时间计时。正常同步与重新提交允许每批最多 5 秒的小幅统计误差。</p>
-<dialog id="read-authorization" aria-labelledby="read-authorization-title"><div class="dialog-heading"><h2 id="read-authorization-title">官方只读授权</h2><button type="button" class="icon-button" data-close-dialog aria-label="关闭官方只读授权">×</button></div><p class="connection-status">{% if connections.key %}已保存官方 Key{% else %}尚未连接官方读取接口{% endif %}</p><p class="hint">Key 只用于搜索与统计，以当前 Windows 用户 DPAPI 加密；不会显示已保存的值。重启后自动读取。</p>{% if key_notice %}<aside>搜索需要第 1 步的官方只读 Key。微信扫码只完成第 2 步登录，不能替代 Key。请在这里连接后再搜索。</aside>{% endif %}{% if not connections.key and connections.key_status.error_code == 'LOCAL_LOGIN_REQUIRED' %}<aside>已保存的官方 Key 无法解密或读取，请使用原 Windows 用户启动程序，或在本机重新连接。</aside>{% endif %}<form method="post" action="/action/key">{{ hidden() }}<label>官方 API Key<input required type="password" name="api_key" autocomplete="off" placeholder="只在本机输入"></label><button>{% if connections.key %}更换并加密保存{% else %}加密保存到本机{% endif %}</button></form></dialog>
+<dialog id="read-authorization" aria-labelledby="read-authorization-title"><div class="dialog-heading"><h2 id="read-authorization-title">官方只读授权</h2><button type="button" class="icon-button" data-close-dialog aria-label="关闭官方只读授权">×</button></div><p class="connection-status">{% if connections.key %}已保存官方 Key{% else %}尚未连接官方读取接口{% endif %}</p><p class="hint">Key 用于搜索、书架与统计，以当前 Windows 用户 DPAPI 加密；不会显示已保存的值。重启后自动读取。</p>{% if key_notice %}<aside>搜索和读取书架需要第 1 步的官方只读 Key。微信扫码只完成第 2 步登录，不能替代 Key。请在这里连接后再查询。</aside>{% endif %}{% if not connections.key and connections.key_status.error_code == 'LOCAL_LOGIN_REQUIRED' %}<aside>已保存的官方 Key 无法解密或读取，请使用原 Windows 用户启动程序，或在本机重新连接。</aside>{% endif %}<form method="post" action="/action/key">{{ hidden() }}<label>官方 API Key<input required type="password" name="api_key" autocomplete="off" placeholder="只在本机输入"></label><button>{% if connections.key %}更换并加密保存{% else %}加密保存到本机{% endif %}</button></form></dialog>
 <dialog id="browser-authorization" aria-labelledby="browser-authorization-title"><div class="dialog-heading"><h2 id="browser-authorization-title">微信读书网页登录</h2><button type="button" class="icon-button" data-close-dialog aria-label="关闭微信读书网页登录">×</button></div><p class="connection-status">{% if connections.browser %}已保存浏览器授权{% else %}扫码登录微信读书{% endif %}</p><p class="hint">启动、准备书籍和同步前自动检查登录，过期时尝试官网正常续期。凭证加密保存在本机；官方撤销授权或续期失败后仍需扫码。关闭程序后不会后台保活。</p><p class="connection-status">{{ connections.session_status }}</p><p class="hint">会打开独立的 Edge/Chrome 窗口。请本人点击登录并扫码，确认与官方 Key 同账号。准备阶段不发送阅读计时请求。</p><form method="post" action="/action/login">{{ hidden() }}<button>{% if connections.browser %}重新扫码授权{% else %}打开本机扫码窗口{% endif %}</button></form></dialog>
 <details class="card search-card" id="book-search" {% if search_open %}open{% endif %}><summary>查找并确认电子版本 <span class="summary-hint">展开 / 收起</span></summary><form class="search-form" method="post" action="/action/search">{{ hidden() }}<label>书名<input required name="query" value="{{ query }}" placeholder="输入书名，例如十八家诗钞"></label><button {% if not connections.key %}disabled{% endif %}>从微信读书搜索</button></form>{% if not connections.key %}<p class="hint">先在右上角连接官方只读授权，再进行搜索；微信扫码只完成第 2 步登录，不能替代 Key。</p>{% endif %}
-{% if candidates %}<div class="table-wrap"><table><thead><tr><th>书籍与作者</th><th>版本</th><th>确认对应关系</th></tr></thead><tbody>{% for book in candidates %}<tr><td><strong>{{ book.title }}</strong><small>{{ book.author }} · {{ book.book_id }}</small></td><td>{{ book.translator or '译者未提供' }}<small>{{ book.publisher or '出版社未提供' }}<br>{{ book.isbn }}</small></td><td><form method="post" action="/action/book">{{ hidden() }}<input type="hidden" name="book_id" value="{{ book.book_id }}"><label class="check"><input required type="checkbox" name="confirmed" value="yes">我已核对作者和版本</label><label class="check"><input type="checkbox" name="corresponding" value="yes">作为对应电子版</label><button class="quiet">选择并绑定此版本</button></form></td></tr>{% endfor %}</tbody></table></div>{% endif %}</details>
+{% if candidates %}{{ book_candidates(candidates) }}{% endif %}</details>
+<details class="card search-card" id="book-shelf" {% if shelf_open %}open{% endif %}>
+  <summary>从我的书架选择（含本地导入书） <span class="summary-hint">展开 / 收起</span></summary>
+  <p class="hint">读取当前官方 Key 对应账号的书架书籍。导入书需已同步至微信读书书架，并支持网页版阅读和单书时长查询，才能使用现有时长同步流程。接口未提供可靠的导入类型标记，请按书名查找。</p>
+  <form method="post" action="/action/shelf">
+    {{ hidden() }}
+    <button {% if not connections.key %}disabled{% endif %}>{% if shelf_loaded %}刷新我的书架{% else %}读取我的书架{% endif %}</button>
+  </form>
+  {% if not connections.key %}<p class="hint">请先在右上角连接官方只读授权。</p>{% endif %}
+  {% if shelf_loaded %}
+    <form class="search-form" method="get" action="/">
+      <input type="hidden" name="shelf" value="1">
+      <label>按书名筛选<input name="shelf_query" value="{{ shelf_query }}" placeholder="留空显示已读取的书架书籍"></label>
+      <button class="quiet">筛选书架</button>
+    </form>
+    <p class="hint">显示上次读取的书架书籍，点击刷新可获取最新内容。缺少版本信息时，需勾选“作为对应电子版”。网页版支持将在准备本书上下文时检查。</p>
+    {% if shelf_books %}
+      {{ book_candidates(shelf_books) }}
+    {% elif shelf_query %}
+      <p class="empty">已读取的书架中没有匹配书名，请修改筛选条件或刷新书架。</p>
+    {% else %}
+      <p class="empty">当前账号书架未返回可选书籍。</p>
+    {% endif %}
+  {% endif %}
+</details>
 {% if active_jobs %}<section class="job-list" aria-label="进行中的操作">{% for job in active_jobs %}<p><a href="/jobs/{{ job.id }}">进行中 · {{ job.kind }} · {{ job.message }}</a></p>{% endfor %}</section>{% endif %}
 <details class="job-history" id="job-history"><summary>历史操作记录 <span class="summary-hint">{{ history_jobs|length }} 条 · 展开 / 收起</span></summary>{% if history_jobs %}<div class="job-list">{% for job in history_jobs %}<p><a href="/jobs/{{ job.id }}">{{ job.created_at }} · {{ job.kind }} · {{ job.state }} · {{ job.message }}</a></p>{% endfor %}</div>{% else %}<p class="hint">本次启动后暂无历史操作记录。</p>{% endif %}<p class="hint">这里显示本次启动期间的操作；重启后阅读账本仍会保留。</p></details>
 {% endif %}

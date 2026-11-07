@@ -109,3 +109,33 @@ def test_search_accepts_scope17_and_detail_retains_edition(root):
     stats=adapter(root,handle)
     assert stats.search("安娜")[0].book_id == "A"
     assert stats.book_info("A").translator == "译者"
+
+
+def test_shelf_keeps_imported_ids_and_links_without_inventing_type(root):
+    calls = []
+    def handle(request):
+        body = json.loads(request.content)
+        calls.append(body)
+        assert body == {"api_name": "/shelf/sync", "skill_version": "1.0.5"}
+        return httpx.Response(200, json={"books": [
+            {"bookId": "CB_imported_1", "title": "我的导入书", "author": "",
+             "readerLink": "https://weread.qq.com/web/reader/importedRoute"},
+            {"bookId": "regular", "title": "普通书", "author": "作者"}],
+            "albums": [{"albumInfo": {"albumId": "audio"}}], "mp": {"title": "收藏"}})
+    stats = adapter(root, handle)
+    books = stats.shelf()
+    assert [book.book_id for book in books] == ["CB_imported_1", "regular"]
+    assert books[0].reader_link == "https://weread.qq.com/web/reader/importedRoute"
+    assert books[0].author == "作者未提供"
+    assert all(book.discovery_source == "shelf" and book.origin == "official" for book in books)
+    assert stats.shelf_book("CB_imported_1") == books[0]
+    with pytest.raises(AppError, match="BOOK_NOT_FOUND"):
+        stats.shelf_book("removed")
+    assert len(calls) == 3
+
+
+@pytest.mark.parametrize("body", [{}, {"books": None}, {"books": {}}, {"books": [None]},
+                                      {"books": [{"bookId": "A"}]}, {"books": [["invalid"]]}])
+def test_invalid_shelf_fails_without_partial_results(root, body):
+    with pytest.raises(AppError, match="READ_SCHEMA"):
+        adapter(root, lambda request: httpx.Response(200, json=body)).shelf()

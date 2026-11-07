@@ -103,13 +103,24 @@ class WebOperations:
                 finally:
                     reader.close()
             return None
+        if action == "shelf":
+            with self.settings.database() as db:
+                reader = self._stats(db)
+                try:
+                    db.cache_shelf(self.settings.account, reader.shelf())
+                finally:
+                    reader.close()
+            return None
         if action == "book":
             if values.get("confirmed") != "yes":
                 raise AppError("BOOK_UNCONFIRMED", "请明确确认这个电子版本")
             with self.settings.database() as db:
                 reader = self._stats(db)
                 try:
-                    info = reader.book_info(values.get("book_id", ""))
+                    if values.get("source") == "shelf":
+                        info = reader.shelf_book(values.get("book_id", ""))
+                    else:
+                        info = reader.book_info(values.get("book_id", ""))
                     db.bind(confirm_book(info, confirmed=True, corresponding_edition=values.get("corresponding")=="yes"))
                 finally:
                     reader.close()
@@ -181,12 +192,21 @@ class WebOperations:
                     current = db.book(book_id)
                     reader = self._stats(db)
                     try:
-                        fresh = reader.book_info(book_id)
+                        if current.discovery_source == "shelf":
+                            fresh = reader.shelf_book(book_id)
+                        else:
+                            fresh = reader.book_info(book_id)
                     finally:
                         reader.close()
                     for key in ("title", "author", "translator", "publisher", "isbn"):
                         if getattr(current,key) != getattr(fresh,key):
                             raise AppError("BOOK_METADATA_CHANGED", "版本信息已变化，请重新核对后绑定")
+                    if current.discovery_source == "shelf":
+                        from paperread.book_routes import approved_reader_link
+                        try:
+                            approved_reader_link(fresh.reader_link)
+                        except AppError:
+                            raise AppError("BOOK_WEB_UNAVAILABLE", "这本书未提供受支持的微信读书网页版阅读链接，暂时无法同步时长") from None
                     book = fresh
                 return run_authorization(self.settings.account,cancel_event=event,progress=progress,
                     lock_path=app_directory()/"writer.lock",book=book,database=db)

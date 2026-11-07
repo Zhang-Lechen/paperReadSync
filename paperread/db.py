@@ -174,6 +174,15 @@ class Database:
             raise AppError("BOOK_NOT_FOUND", "没有该候选书，请先搜索或明确录入版本信息")
         return Book.model_validate_json(row[0])
 
+    def cache_shelf(self, account_id: str, books: list[Book]):
+        with self.transaction():
+            self.conn.execute("INSERT OR REPLACE INTO metadata VALUES(?,?)",
+                ("shelf:" + account_id, json.dumps([book.model_dump() for book in books], ensure_ascii=True)))
+
+    def shelf_candidates(self, account_id: str) -> list[Book] | None:
+        row = self.conn.execute("SELECT value FROM metadata WHERE key=?", ("shelf:" + account_id,)).fetchone()
+        return [Book.model_validate(value) for value in json.loads(row[0])] if row else None
+
     def search_local(self, query: str) -> list[Book]:
         rows = self.conn.execute("SELECT document FROM candidates UNION SELECT document FROM books").fetchall()
         books = {book.book_id: book for row in rows if
