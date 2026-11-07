@@ -64,3 +64,43 @@ def test_corrupt_key_file_is_not_reported_as_connected():
     store.path.write_bytes(b"synthetic-invalid-encrypted-file")
     assert store.exists()
     assert read_key_status()=={"available":False,"source":None,"error_code":"LOCAL_LOGIN_REQUIRED"}
+
+
+@pytest.mark.skipif(os.name!="nt", reason="Windows native command encoding")
+def test_private_directory_reads_sid_from_localized_bytes(monkeypatch,tmp_path):
+    import subprocess
+    import paperread.credentials as credentials
+    calls=[]
+    def run(arguments,**options):
+        calls.append(arguments)
+        if arguments[0]=="whoami":
+            assert not options.get("text",False)
+            return subprocess.CompletedProcess(arguments,0,
+                stdout=b'"\xc0\xee\xcb\xc4","S-1-5-21-123-456-789-1001"\r\n',stderr=b'')
+        return subprocess.CompletedProcess(arguments,0,stdout=b'',stderr=b'')
+    monkeypatch.setattr(credentials.subprocess,"run",run)
+    credentials._private_directory(tmp_path/"private")
+    assert calls[1][0]=="icacls"
+    assert "*S-1-5-21-123-456-789-1001:(OI)(CI)F" in calls[1]
+
+
+@pytest.mark.skipif(os.name!="nt", reason="Windows hidden process and DPAPI")
+def test_hidden_utf8_process_can_save_real_dpapi_credentials(tmp_path):
+    import subprocess
+    import sys
+    # Force the same combination as the desktop background server, with real
+    # native commands and an isolated synthetic credential store.
+    source="""
+import subprocess,sys
+from pathlib import Path
+from paperread.credentials import CredentialStore,WriterCredentials
+store=CredentialStore('synthetic-hidden',directory=Path(sys.argv[1]))
+profile=WriterCredentials(wr_skey='synthetic-private-value',wr_vid='synthetic-private-account',
+                          captured_headers={},captured_payload={})
+store.save(profile)
+assert store.load().wr_skey.get_secret_value()=='synthetic-private-value'
+"""
+    result=subprocess.run([sys.executable,"-X","utf8","-c",source,str(tmp_path/"isolated")],
+        capture_output=True,timeout=20,creationflags=subprocess.CREATE_NO_WINDOW)
+    assert result.returncode==0,result.stderr.decode("utf-8",errors="replace")
+    assert b"UnicodeDecodeError" not in result.stderr

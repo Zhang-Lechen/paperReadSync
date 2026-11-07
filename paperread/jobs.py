@@ -1,7 +1,9 @@
 """Explicit, bounded user jobs; no scheduler, no automatic retries or startup jobs."""
 
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from threading import Event, Lock
+import traceback
 from uuid import uuid4
 
 from paperread.errors import AppError
@@ -58,10 +60,14 @@ class JobManager:
             with self.lock:
                 self.jobs[identifier].update(state="CANCELLED" if exc.code=="USER_CANCELLED" else "FAILED",
                                             message=exc.message,error_code=exc.code)
-        except Exception:
+        except Exception as exc:
+            # Store only exception metadata, never exception messages or local values.
+            source = next((frame for frame in reversed(traceback.extract_tb(exc.__traceback__))
+                           if Path(frame.filename).resolve().parent == Path(__file__).resolve().parent), None)
+            location = f"{Path(source.filename).name}:{source.lineno}" if source else None
             with self.lock:
-                self.jobs[identifier].update(state="FAILED",message="操作失败，已保留待核验信息且未自动重试",
-                                            error_code="JOB_FAILED")
+                self.jobs[identifier].update(state="FAILED",message=f"程序内部异常（{type(exc).__name__}），详情中可查看发生位置。",
+                                            error_code="JOB_FAILED",error_type=type(exc).__name__,error_location=location)
 
     def snapshots(self):
         with self.lock:

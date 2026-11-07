@@ -38,6 +38,9 @@ def test_job_cancellation_and_private_error_are_sanitized():
         assert finished(jobs,identifier)["state"]=="CANCELLED"
         def fails(event,progress): raise RuntimeError("wr_skey=synthetic-private-value")
         identifier=jobs.submit("test",fails)
-        assert finished(jobs,identifier)["state"]=="FAILED"
+        failed=finished(jobs,identifier)
+        assert failed["state"]=="FAILED"
+        assert failed["error_type"]=="RuntimeError"
+        assert failed["error_location"].startswith("jobs.py:")
         assert "synthetic-private-value" not in str(jobs.snapshots())
     finally: jobs.shutdown()

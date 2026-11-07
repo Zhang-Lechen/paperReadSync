@@ -47,12 +47,14 @@ def _private_directory(path: Path):
         return
     try:
         result = subprocess.run(["whoami", "/user", "/fo", "csv", "/nh"],
-                                capture_output=True, text=True, check=True, timeout=10)
-        match = re.search(r"S-1-[0-9-]+", result.stdout)
+                                capture_output=True, check=True, timeout=10)
+        # Native Windows output can use the system code page in a hidden process.
+        # The SID is ASCII regardless of the surrounding localized account name.
+        match = re.search(rb"S-1-[0-9-]+", result.stdout)
         if not match:
             raise ValueError()
         subprocess.run(["icacls", str(path), "/inheritance:r", "/grant:r",
-                        "*" + match[0] + ":(OI)(CI)F", "*S-1-5-18:(OI)(CI)F"],
+                        "*" + match[0].decode("ascii") + ":(OI)(CI)F", "*S-1-5-18:(OI)(CI)F"],
                        capture_output=True, check=True, timeout=10)
     except (OSError, ValueError, subprocess.SubprocessError):
         raise AppError("PRIVATE_STORAGE", "无法设置当前用户的私有凭证目录") from None
