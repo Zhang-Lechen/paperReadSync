@@ -104,11 +104,35 @@
 {% else %}<p>上方直接同步会自动获取写前读数，此处旧版表单需要先查询当前读数。</p>{% endif %}</details>
 </details>
 </section>{% endfor %}{% endif %}
-<div class="forms">{% if mock %}<section class="card"><p class="step">01 / 确认书籍</p><h2>选对那个版本</h2><form method="post" action="/action/book"><input type="hidden" name="csrf" value="{{ csrf }}">
+<div class="forms">{% if mock %}<section class="card mock-book-form"><p class="step">01 / 确认书籍</p><h2>选对那个版本</h2><form method="post" action="/action/book"><input type="hidden" name="csrf" value="{{ csrf }}">
 <label>书籍 ID<input required name="book_id" placeholder="{% if mock %}mock-anna{% else %}已人工核对的 bookId{% endif %}"></label>
 <label>书名<input required name="title" maxlength="500" placeholder="安娜·卡列尼娜"></label><label>作者<input required name="author" maxlength="500"></label><div class="two"><label>译者<input name="translator" maxlength="500"></label><label>出版社<input name="publisher" maxlength="500"></label></div>
 <label class="check"><input type="checkbox" name="corresponding" value="yes">无法匹配纸质版本，明确作为对应电子版</label><label class="check"><input required type="checkbox" name="confirmed" value="yes">我已核对以上作者与版本</label><button>确认并绑定</button></form></section>{% endif %}
-<section class="card"><p class="step">02 / 保存会话</p><h2>这次读了多久</h2><form method="post" action="/action/entry"><input type="hidden" name="csrf" value="{{ csrf }}"><div class="book-picker-heading"><label for="entry-book">已确认的书籍</label><button type="button" class="quiet" data-open-dialog="book-management" aria-haspopup="dialog">管理书籍</button></div><select required id="entry-book" name="book_id"><option value="" selected disabled>请选择版本</option>{% for book in books %}<option value="{{ book.book_id }}">{{ book.title }} · {{ book.translator or book.publisher or '对应电子版' }}</option>{% endfor %}<option value="" data-manage-books>管理书籍…</option></select>
-<div class="two"><label>实际阅读日期<input required type="date" name="date" value="{{ today }}" max="{{ today }}"></label><label>分钟<input required type="number" name="minutes" min="1" max="1440" step="1" value="60"></label></div><label>备注<textarea name="note" rows="3" maxlength="4000" placeholder="纸质阅读的实际记录"></textarea></label><label class="check"><input type="checkbox" name="new_session" value="yes">若提示可能重复，我确认这是独立阅读会话</label><button>仅保存到本地</button><p class="hint">保存不会自动同步。相同书籍、日期与时长会提醒可能重复。</p></form></section></div>
-<dialog id="book-management" class="book-management" aria-labelledby="book-management-title"><div class="dialog-heading"><h2 id="book-management-title">书籍管理</h2><button type="button" class="icon-button" data-close-dialog aria-label="关闭书籍管理">×</button></div><p class="hint">不再读的书可以从“已确认的书籍”中移除，之后可随时恢复。已有阅读记录、核验结果和待查额度会保留；这里只管理本地列表。</p>{% if managed_books %}<ul class="managed-books">{% for item in managed_books %}<li><div><strong>{{ item.book.title }}</strong><small>{{ item.book.translator or item.book.publisher or '版本信息未提供' }} · {{ item.book.book_id }}{% if item.removed %} · 已移除{% endif %}</small></div><form method="post" action="/action/{{ 'book-restore' if item.removed else 'book-remove' }}">{{ hidden() }}<input type="hidden" name="book_id" value="{{ item.book.book_id }}"><button class="quiet" aria-label="{{ '恢复' if item.removed else '移除' }}《{{ item.book.title }}》">{{ '恢复' if item.removed else '移除' }}</button></form></li>{% endfor %}</ul>{% else %}<p>还没有已确认的书籍，请先查找并确认版本。</p>{% endif %}</dialog>
+<section class="card" id="entry-form"><p class="step">02 / 保存会话</p><h2>这次读了多久</h2><form method="post" action="/action/entry"><input type="hidden" name="csrf" value="{{ csrf }}"><label for="entry-book">已确认的书籍</label><select required id="entry-book" name="book_id"><option value="" selected disabled>请选择版本</option>{% for book in books %}<option value="{{ book.book_id }}">{{ book.title }} · {{ book.translator or book.publisher or '对应电子版' }}</option>{% endfor %}</select>
+<div class="two"><label>实际阅读日期<input required type="date" name="date" value="{{ today }}" max="{{ today }}"></label><label>分钟<input required type="number" name="minutes" min="1" max="1440" step="1" value="60"></label></div><label>备注<textarea name="note" rows="3" maxlength="4000" placeholder="纸质阅读的实际记录"></textarea></label><label class="check"><input type="checkbox" name="new_session" value="yes">若提示可能重复，我确认这是独立阅读会话</label><button>仅保存到本地</button><p class="hint">保存不会自动同步。相同书籍、日期与时长会提醒可能重复。</p></form></section>
+<section id="book-management" class="card book-management" aria-labelledby="book-management-title">
+  <p class="step">03 / 已确认书籍</p>
+  <h2 id="book-management-title">书籍列表</h2>
+  <p class="hint">可移除暂时不读的书，之后随时恢复。已有阅读记录、核验结果和待查额度会保留。</p>
+  {% if managed_books %}
+    <ul class="managed-books" tabindex="0" aria-label="已确认的书籍列表">
+      {% for item in managed_books %}
+        <li>
+          <div>
+            <strong>{{ item.book.title }}</strong>
+            <small>{{ item.book.translator or item.book.publisher or '版本信息未提供' }} · {{ item.book.book_id }}{% if item.removed %} · 已移除{% endif %}</small>
+          </div>
+          <form method="post" action="/action/{{ 'book-restore' if item.removed else 'book-remove' }}">
+            {{ hidden() }}
+            <input type="hidden" name="book_id" value="{{ item.book.book_id }}">
+            <button class="quiet" aria-label="{{ '恢复' if item.removed else '移除' }}《{{ item.book.title }}》">{{ '恢复' if item.removed else '移除' }}</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">还没有已确认的书籍，请先查找并确认版本。</p>
+  {% endif %}
+</section>
+</div>
 <footer>本地运行于 127.0.0.1 · 凭证仅在本机加密保存</footer></main></body></html>

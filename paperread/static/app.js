@@ -88,17 +88,6 @@ function followHash(scroll = false) {
   if (target?.tagName === "DETAILS") target.open = true;
 }
 
-const bookPicker = document.getElementById("entry-book");
-if (bookPicker) {
-  let previousBook = bookPicker.value;
-  bookPicker.addEventListener("change", () => {
-    if (bookPicker.selectedOptions[0]?.hasAttribute("data-manage-books")) {
-      bookPicker.value = previousBook;
-      openDialog(document.getElementById("book-management"));
-    } else previousBook = bookPicker.value;
-  });
-}
-
 for (const button of document.querySelectorAll("[data-open-dialog]")) {
   button.addEventListener("click", () => openDialog(document.getElementById(button.dataset.openDialog)));
 }

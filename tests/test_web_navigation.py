@@ -128,3 +128,71 @@ def test_return_from_diagnosis_restores_ledger_view(root, tmp_path, monkeypatch)
                 browser.close()
     finally:
         app.state.operations.jobs.shutdown()
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="Uses the installed Windows Edge browser")
+def test_book_list_matches_form_height_and_stacks_on_mobile(root, tmp_path):
+    playwright = pytest.importorskip("playwright.sync_api")
+    settings = Settings(root, tmp_path / "book-layout.sqlite", "default", False, False)
+    with settings.database() as db:
+        for number in range(24):
+            db.bind(confirm_book(Book(book_id=str(10001 + number), title=f"布局测试书 {number}",
+                author="作者", publisher="出版社", origin="official"), confirmed=True))
+    app = create_app(settings)
+    origin = "http://127.0.0.1:8765"
+
+    def send(request):
+        async def execute():
+            async with httpx.AsyncClient(transport=httpx.ASGITransport(app), base_url=origin) as client:
+                return await client.request(request.method, request.url,
+                    content=request.post_data_buffer, headers=request.headers)
+        return asyncio.run(execute())
+
+    try:
+        with ThreadPoolExecutor(max_workers=1) as executor, playwright.sync_playwright() as engine:
+            try:
+                browser = engine.chromium.launch(channel="msedge", headless=True)
+            except playwright.Error as exc:
+                pytest.skip(f"Edge unavailable: {exc}")
+            try:
+                page = browser.new_page(viewport={"width":1280, "height":1000})
+                errors = []
+                page.on("pageerror", lambda error: errors.append(str(error)))
+
+                def dispatch(route):
+                    if urlparse(route.request.url).netloc != "127.0.0.1:8765":
+                        route.abort()
+                        return
+                    response = executor.submit(send, route.request).result(timeout=10)
+                    route.fulfill(status=response.status_code, headers=dict(response.headers), body=response.content)
+
+                page.route("**/*", dispatch)
+                page.goto(origin)
+                for height in (120, 300):
+                    page.locator('#entry-form textarea').evaluate("(element, height) => element.style.height = height + 'px'", height)
+                    left = page.locator("#entry-form").bounding_box()
+                    right = page.locator("#book-management").bounding_box()
+                    assert right["x"] > left["x"] + left["width"]
+                    assert abs(left["y"] - right["y"]) < 1
+                    assert abs(left["height"] - right["height"]) < 1
+                    assert page.locator(".managed-books").evaluate("element => element.scrollHeight > element.clientHeight")
+
+                # Existing management forms work directly in the inline panel.
+                page.get_by_role("button", name="移除《布局测试书 0》", exact=True).click()
+                page.wait_for_url("**#book-management")
+                assert page.locator('#entry-book option[value="10001"]').count() == 0
+                page.get_by_role("button", name="恢复《布局测试书 0》", exact=True).click()
+                page.wait_for_selector('#entry-book option[value="10001"]', state="attached")
+
+                page.set_viewport_size({"width":390, "height":844})
+                left = page.locator("#entry-form").bounding_box()
+                right = page.locator("#book-management").bounding_box()
+                assert right["y"] >= left["y"] + left["height"]
+                assert abs(left["x"] - right["x"]) < 1
+                assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+                assert page.locator(".managed-books").evaluate("element => element.clientHeight <= 420")
+                assert errors == []
+            finally:
+                browser.close()
+    finally:
+        app.state.operations.jobs.shutdown()
