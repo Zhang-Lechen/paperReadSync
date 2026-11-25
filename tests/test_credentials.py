@@ -57,7 +57,9 @@ def test_read_key_status_and_request_resolver_agree_after_reopening(monkeypatch)
     assert "synthetic-restart-private-value" not in str(status)
 
 
-def test_corrupt_key_file_is_not_reported_as_connected():
+def test_corrupt_key_file_is_not_reported_as_connected(monkeypatch):
+    import paperread.credentials as credentials
+    monkeypatch.setattr(credentials.sys, "platform", "win32")
     from paperread.credentials import ApiKeyStore,read_key_status
     store=ApiKeyStore()
     store.directory.mkdir(parents=True)

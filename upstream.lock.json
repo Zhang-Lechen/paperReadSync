@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "audited_at": "2026-10-23",
-  "official_skill_version": "1.0.5",
+  "audited_at": "2026-11-21",
+  "official_skill_version": "1.0.6",
   "repositories": [
     {
       "name": "WeReadGears",
@@ -13,7 +13,7 @@
     {
       "name": "WeChatReading",
       "url": "https://github.com/Tencent/WeChatReading.git",
-      "commit": "d98e66ee60a8c7bcd35da549d0643c4470439643",
+      "commit": "61c337269bdaf078615bdd8919ed2592043c142e",
       "patch": null,
       "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }

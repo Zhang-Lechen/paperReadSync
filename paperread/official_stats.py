@@ -2,11 +2,15 @@
 
 import hashlib
 import json
+import logging
 from datetime import datetime
 from pathlib import Path
+from threading import Event
 from zoneinfo import ZoneInfo
 
 import httpx
+
+from paperread.network import online_client
 from pydantic import ValidationError
 
 from paperread.credentials import official_key
@@ -15,6 +19,8 @@ from paperread.models import Book, StatsPair, utc_now
 
 GATEWAY = "https://i.weread.qq.com/api/agent/gateway"
 READ_APIS = {"/store/search", "/shelf/sync", "/book/info", "/book/getprogress", "/readdata/detail"}
+upgrade_notice = Event()
+logger = logging.getLogger(__name__)
 
 
 class OfficialStats:
@@ -39,8 +45,7 @@ class OfficialStats:
         except (OSError, ValueError, KeyError):
             raise AppError("OFFICIAL_SCHEMA", "官方文档版本未锁定，请更新并重新审计") from None
         self._owned = client is None
-        self.client = client or httpx.Client(timeout=15, follow_redirects=False, trust_env=False,
-                                            transport=httpx.HTTPTransport(retries=0))
+        self.client = client or online_client(timeout=15)
 
     def __repr__(self):
         return "OfficialStats(<private>)"
@@ -70,7 +75,8 @@ class OfficialStats:
         if not isinstance(value, dict):
             raise AppError("READ_SCHEMA", "只读接口结构不符合锁定文档")
         if "upgrade_info" in value:
-            raise AppError("UPGRADE_REQUIRED", "服务端要求更新官方接口文档，已停止")
+            upgrade_notice.set()
+            logger.warning("微信读书官方接口提示有更新；请检查 PaperRead Sync 的适配版本。")
         if value.get("errcode", 0) != 0:
             raise AppError("READ_REMOTE_ERROR", "只读接口业务失败，请检查本地授权和接口版本")
         # The pinned documentation describes top-level fields; do not guess envelopes.
@@ -79,7 +85,7 @@ class OfficialStats:
     def search(self, query: str, *, max_idx: int = 0) -> list[Book]:
         if not query.strip():
             raise AppError("QUERY_EMPTY", "搜索书名不能为空")
-        value = self.request("/store/search", keyword=query.strip(), scope=10, maxIdx=max_idx)
+        value = self.request("/store/search", keyword=query.strip(), context=query.strip(), scope=10, maxIdx=max_idx)
         groups = value.get("results")
         if not isinstance(groups, list):
             raise AppError("READ_SCHEMA", "搜索返回缺少结果列表")

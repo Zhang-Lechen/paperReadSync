@@ -9,6 +9,8 @@ from urllib.parse import urlparse
 
 import httpx
 
+from paperread.network import online_client
+
 from paperread.credentials import WriterCredentials
 from paperread.errors import AppError
 from paperread.upstream_protocol import UpstreamPayload
@@ -154,8 +156,7 @@ class BoundedWriter:
         from paperread.web_session import session_cookies
         cookies = session_cookies(self.credentials)
         # Lazy creation ensures rejected calls never construct a live transport.
-        client = self._client or httpx.Client(timeout=10, follow_redirects=False, trust_env=False,
-                                             transport=httpx.HTTPTransport(retries=0))
+        client = self._client or online_client(timeout=10)
         started = self.monotonic()
         started_wall = int(self.wall_time())
         last_wall = started_wall

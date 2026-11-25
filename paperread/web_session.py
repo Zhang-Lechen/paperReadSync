@@ -1,6 +1,8 @@
 """Official web session validation and a single normal login renewal. No reading POST."""
 
 import httpx
+
+from paperread.network import online_client
 from pydantic import SecretStr
 
 from paperread.errors import AppError
@@ -31,8 +33,7 @@ def session_cookies(profile):
 
 def validate_session(profile, *, client=None):
     owned = client is None
-    client = client or httpx.Client(timeout=15, follow_redirects=False, trust_env=False,
-                                   transport=httpx.HTTPTransport(retries=0))
+    client = client or online_client(timeout=15)
     headers = {key:value for key,value in profile.captured_headers.items()
                if key.lower() in {"user-agent", "referer", "accept", "accept-language"}}
     try:
@@ -49,7 +50,7 @@ def validate_session(profile, *, client=None):
         except ValueError:
             raise AppError("SESSION_SCHEMA", "网页登录校验响应无效，未发送阅读请求") from None
     except httpx.HTTPError:
-        raise AppError("SESSION_NETWORK", "网页登录校验网络失败，未发送阅读请求或自动重试") from None
+        raise AppError("SESSION_NETWORK", "网页登录校验连接失败；请检查网络或代理能否访问 weread.qq.com，然后重试。未发送阅读请求或自动重试") from None
     finally:
         if owned:
             client.close()
@@ -58,8 +59,7 @@ def validate_session(profile, *, client=None):
 def renew_session(profile, *, client=None):
     """Return validated credentials and cookie metadata; never persist on failure."""
     owned = client is None
-    client = client or httpx.Client(timeout=15, follow_redirects=False, trust_env=False,
-                                   transport=httpx.HTTPTransport(retries=0))
+    client = client or online_client(timeout=15)
     headers = {key:value for key,value in profile.captured_headers.items()
                if key.lower() in {"user-agent", "referer", "accept", "accept-language", "origin"}}
     headers.setdefault("origin", "https://weread.qq.com")

@@ -60,7 +60,7 @@ def main():
     for command in commands:
         result=subprocess.run([sys.executable,*command],cwd=ROOT,capture_output=True,text=True,
             encoding="utf-8",errors="replace",timeout=60,env={**os.environ,"PYTHONIOENCODING":"utf-8"})
-        output={"command":".venv\\Scripts\\python "+" ".join(command),"exit_code":result.returncode,
+        output={"command":sys.executable + " " + " ".join(command),"exit_code":result.returncode,
                 "stdout":redact(result.stdout.strip()),"stderr":redact(result.stderr.strip())}
         evidence["checks"].append(output)
         print(output["command"]+": "+str(result.returncode))

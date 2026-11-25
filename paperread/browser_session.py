@@ -6,11 +6,14 @@ The user scans the actual WeRead login page in a visible temporary browser.
 """
 
 import asyncio
+from contextlib import contextmanager, ExitStack
 import hashlib
 import json
 import os
+import sys
 from pathlib import Path
 import time
+import traceback
 from urllib.parse import urlparse
 
 from paperread.book_routes import approved_reader_link, validate_captured_mapping
@@ -50,6 +53,11 @@ def _channel():
             return "msedge"
         if Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe").is_file():
             return "chrome"
+    if sys.platform == "darwin":
+        for channel, bundle, executable in (("chrome", "Google Chrome", "Google Chrome"),
+                                             ("msedge", "Microsoft Edge", "Microsoft Edge")):
+            if (Path("/Applications") / f"{bundle}.app" / "Contents/MacOS" / executable).is_file():
+                return channel
     return "chromium"
 
 
@@ -84,6 +92,24 @@ class CaptureGuard:
             await route.abort()
 
 
+@contextmanager
+def browser_step(stage, label):
+    """Keep actionable stage information without exposing Playwright's raw logs.
+
+    Playwright errors can contain cookies, response bodies, URLs and local paths.
+    Never include their message or traceback text in public job results.
+    """
+    try:
+        yield
+    except AppError:
+        raise
+    except Exception as exc:
+        category = ("超时" if isinstance(exc, TimeoutError) or type(exc).__name__ == "TimeoutError"
+                    else "连接中断" if isinstance(exc, ConnectionError)
+                    else "浏览器调用异常")
+        raise AppError("BROWSER_" + stage, f"{label}失败（{category}）；请重试，若仍失败请提供此错误码。未输出凭证") from None
+
+
 async def authorize(account_id, *, cancel_event, progress, book=None, database=None, timeout=300,
                     private_directory=None, recovery_identity_hash=None):
     if os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS") or os.environ.get("PYTEST_CURRENT_TEST"):
@@ -98,8 +124,9 @@ async def authorize(account_id, *, cancel_event, progress, book=None, database=N
     if book is not None and session_store.exists():
         from paperread.session_manager import SessionManager
         progress("正在检查已保存的登录；过期时尝试正常续期，不发送阅读请求")
-        await asyncio.to_thread(SessionManager(account_id, directory=private_directory).ensure_browser,
-                                expected_identity=recovery_identity_hash)
+        with browser_step("PREFLIGHT", "打开浏览器前校验已保存登录"):
+            await asyncio.to_thread(SessionManager(account_id, directory=private_directory).ensure_browser,
+                                    expected_identity=recovery_identity_hash)
     # Login must actually show a fresh QR flow; reusing saved (expired) cookies
     # previously made "re-login" finish immediately without repairing anything.
     state = session_store.load() if book is not None and session_store.exists() else None
@@ -110,17 +137,25 @@ async def authorize(account_id, *, cancel_event, progress, book=None, database=N
     guard = CaptureGuard(book)
     async with async_playwright() as playwright:
         browser = None
+        network_scope = ExitStack()
         try:
             channel = _channel()
             options = {"headless": False}
+            from paperread.proxy_dns import browser_network
+            with browser_step("NETWORK", "准备浏览器网络连接"):
+                options.update(network_scope.enter_context(browser_network()))
             if channel != "chromium":
                 options["channel"] = channel
-            browser = await playwright.chromium.launch(**options)
-            context = await browser.new_context(storage_state=state, service_workers="block", accept_downloads=False)
+            with browser_step("LAUNCH", "启动 " + channel):
+                browser = await playwright.chromium.launch(**options)
+            with browser_step("RESTORE", "恢复浏览器会话"):
+                context = await browser.new_context(storage_state=state, service_workers="block", accept_downloads=False)
 
-            await context.route("**/*", guard)
-            await context.route_web_socket("**/*", lambda socket: socket.close())
-            page = await context.new_page()
+            with browser_step("GUARD", "安装阅读请求拦截"):
+                await context.route("**/*", guard)
+                await context.route_web_socket("**/*", lambda socket: socket.close())
+            with browser_step("PAGE", "打开授权页面"):
+                page = await context.new_page()
             target = book.reader_link if book is not None else "https://weread.qq.com/"
             progress("请在打开的浏览器扫码登录；所有阅读计时请求均已拦截" if book is None else
                      "正在准备这本书的章节上下文；计时请求只捕获，不发送")
@@ -195,8 +230,11 @@ async def authorize(account_id, *, cancel_event, progress, book=None, database=N
                 await asyncio.sleep(0.5)
             raise AppError("BROWSER_TIMEOUT", "等待授权/章节上下文超时；已关闭浏览器且未发送阅读请求")
         finally:
-            if browser is not None:
-                await browser.close()
+            try:
+                if browser is not None:
+                    await browser.close()
+            finally:
+                network_scope.close()
 
 
 def run_authorization(account_id, *, cancel_event, progress, lock_path, **kwargs):
@@ -211,8 +249,16 @@ def run_authorization(account_id, *, cancel_event, progress, lock_path, **kwargs
                                             recovery_identity_hash=expected, **kwargs))
         except AppError:
             raise
-        except Exception:
-            raise AppError("BROWSER_FAILED", "浏览器授权失败；请检查本机 Edge/Chrome 与网络，未输出凭证") from None
+        except Exception as exc:
+            # Only our own source location and an allowlisted exception category;
+            # raw browser/transport messages may contain credential material.
+            frame = next((item for item in reversed(traceback.extract_tb(exc.__traceback__))
+                          if Path(item.filename).resolve() == Path(__file__).resolve()), None)
+            location = f"browser_session.py:{frame.lineno}" if frame else "browser_session.py"
+            category = type(exc).__name__ if type(exc).__name__ in {
+                "TypeError", "ValueError", "RuntimeError", "AttributeError", "OSError",
+                "TimeoutError", "Error", "TargetClosedError"} else "Exception"
+            raise AppError("BROWSER_FAILED", f"浏览器授权失败（{category}，{location}）；请提供此定位信息，未输出凭证") from None
 
 
 def recovery_identity(database, account_id, book, marker_path):

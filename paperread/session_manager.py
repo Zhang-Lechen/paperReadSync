@@ -1,4 +1,4 @@
-"""Maintain same-account DPAPI authorization. Callers hold the global writer lock.
+"""Maintain same-account OS-protected authorization. Callers hold the global writer lock.
 
 No timers, reading requests, ledger changes, or retry of an uncertain reading POST.
 """

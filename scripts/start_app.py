@@ -54,6 +54,9 @@ def main():
     options = {"cwd": ROOT}
     if sys.platform == "win32":
         options["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
+    else:
+        # Deliver Ctrl+C once, via this launcher, allowing graceful shutdown.
+        options["start_new_session"] = True
     process = subprocess.Popen([sys.executable, "-m", "paperread", "--root", str(ROOT),
                                 "serve", "--port", str(args.port)], **options)
     try:

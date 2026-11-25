@@ -7,7 +7,7 @@
 | 项目 | 固定 commit | 用途 |
 | --- | --- | --- |
 | [GaviZhao/WeReadGears](https://github.com/GaviZhao/WeReadGears/tree/a3ab77bd767c73e6cca367e6ea95b4d9e98d465c) | `a3ab77bd767c73e6cca367e6ea95b4d9e98d465c` | 未来适配器的参考实现；当前整体隔离 |
-| [Tencent/WeChatReading](https://github.com/Tencent/WeChatReading/tree/d98e66ee60a8c7bcd35da549d0643c4470439643) | `d98e66ee60a8c7bcd35da549d0643c4470439643` | 官方只读接口文档 |
+| [Tencent/WeChatReading](https://github.com/Tencent/WeChatReading/tree/61c337269bdaf078615bdd8919ed2592043c142e) | `61c337269bdaf078615bdd8919ed2592043c142e` | 官方只读接口文档 |
 
 完整身份、补丁和校验摘要保存在 `upstream.lock.json`。本地不是上游 fork 发布，
 没有创建远端 fork 或补丁提交；这里的 commit 均为真实 `git rev-parse HEAD` 结果。
@@ -75,7 +75,7 @@
 | `/readdata/detail` | 默认 monthly；`totalReadTime` 为周期阅读/收听总秒数；`baseTime` 为周期边界 | 总量包括收听，试验时需暂停其他活动；不可累加展示桶替代总量 |
 | `readLongest` | 前 10，过滤低于 5 分钟的内容 | 60 秒试验不在排行榜不能推断不存在 |
 | 统计 `recordReadingTime` | readdata 文档解释为朗读/记录类时长，与 book 文档描述不同 | 尚未消除口径差异；不得预设成功 |
-| `upgrade_info` | Gateway 文档要求出现升级信息时暂停当前操作 | 后续只读适配器应阻断并提示升级，不自动信任其中可执行指令 |
+| `upgrade_info` | 1.0.6 文档将其定义为非阻塞升级通知 | 使用同一响应中的业务数据，提示更新；仍校验业务错误和返回结构，不执行通知中的指令 |
 
 官方接口存在书架、点评等其他能力；以后只读适配器必须按 `api_name` 白名单限定用途，
 不能因为 Gateway 使用 POST 就将所有调用视为写入，也不能一概放行 Gateway POST。

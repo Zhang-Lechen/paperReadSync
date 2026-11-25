@@ -1,5 +1,7 @@
 import asyncio
 import json
+import sys
+from paperread.credentials import _read_private
 
 import httpx
 import pytest
@@ -43,7 +45,7 @@ def response(request, *, valid=False):
 
 
 def test_valid_session_only_checks_once_without_rewriting_stores(manager):
-    before = [store.path.read_bytes() for store in (manager.book, manager.browser)]
+    before = [_read_private(store.path) for store in (manager.book, manager.browser)]
     calls = []
     def handler(request):
         calls.append(request)
@@ -51,7 +53,7 @@ def test_valid_session_only_checks_once_without_rewriting_stores(manager):
     with httpx.Client(transport=httpx.MockTransport(handler)) as client:
         updated, token, status = manager.ensure(profile(), client=client)
     assert status == "VALID" and len(calls) == 1 and calls[0].method == "GET"
-    assert before == [store.path.read_bytes() for store in (manager.book, manager.browser)]
+    assert before == [_read_private(store.path) for store in (manager.book, manager.browser)]
 
 
 def test_expired_session_renews_once_validates_and_survives_new_manager(manager):
@@ -73,7 +75,10 @@ def test_expired_session_renews_once_validates_and_survives_new_manager(manager)
     assert calls == [("GET","/web/getConfig"),("GET","/web/getConfig"),
         ("POST","/web/login/renewal"),("GET","/web/getConfig"),("GET","/web/getConfig")]
     for store in (manager.book,manager.browser):
-        assert b"synthetic-new" not in store.path.read_bytes()
+        if sys.platform == "darwin":
+            assert not store.path.exists()
+        else:
+            assert b"synthetic-new" not in store.path.read_bytes()
     assert "synthetic-token" not in repr(token) and "synthetic-new" not in repr(updated)
 
 
@@ -91,7 +96,7 @@ def test_other_book_reuses_newer_shared_auth_without_second_renewal(manager):
 
 @pytest.mark.parametrize("kind",["account", "foreign-domain", "missing", "revalidation", "network", "rate", "refused", "redirect", "conflict"])
 def test_failed_renewal_never_persists_or_sends_reading_request(manager,kind):
-    before = [store.path.read_bytes() for store in (manager.book,manager.browser)]
+    before = [_read_private(store.path) for store in (manager.book,manager.browser)]
     calls=[]
     def handler(request):
         calls.append(request)
@@ -115,7 +120,7 @@ def test_failed_renewal_never_persists_or_sends_reading_request(manager,kind):
     assert "synthetic-" not in str(error.value)
     assert sum(item.method == "POST" for item in calls) == 1
     assert all(item.url.path in {"/web/getConfig","/web/login/renewal"} for item in calls)
-    assert before == [store.path.read_bytes() for store in (manager.book,manager.browser)]
+    assert before == [_read_private(store.path) for store in (manager.book,manager.browser)]
 
 
 def test_different_shared_account_stops_before_network(manager):

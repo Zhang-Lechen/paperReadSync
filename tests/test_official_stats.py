@@ -6,7 +6,7 @@ import httpx
 import pytest
 
 from paperread.errors import AppError
-from paperread.official_stats import GATEWAY, OfficialStats
+from paperread.official_stats import GATEWAY, OfficialStats, upgrade_notice
 
 
 def adapter(root, handler):
@@ -33,7 +33,7 @@ def test_pair_uses_book_seconds_and_total_not_buckets_or_rank(root):
         assert str(request.url) == GATEWAY
         body = json.loads(request.content)
         calls.append(body)
-        assert body["skill_version"] == "1.0.5"
+        assert body["skill_version"] == "1.0.6"
         assert "params" not in body
         if body["api_name"] == "/book/getprogress":
             return httpx.Response(200, json={"bookId": "A", "book": {"readingTime": 123,"recordReadingTime": 0}, "timestamp": 123456})
@@ -63,10 +63,35 @@ def test_http_failures_never_retry_or_expose_response(root, status, code):
 
 
 @pytest.mark.parametrize("body,code", [([],"READ_SCHEMA"),({"errcode":-1,"errmsg":"private"},"READ_REMOTE_ERROR"),
-                                     ({"upgrade_info":{"message":"private"}},"UPGRADE_REQUIRED")])
-def test_schema_and_upgrade_fail_closed(root, body, code):
+                                     ({"errcode":-1,"upgrade_info":{"message":"private"}},"READ_REMOTE_ERROR")])
+def test_schema_and_remote_errors_fail_closed(root, body, code):
     with pytest.raises(AppError, match=code):
         adapter(root, lambda request: httpx.Response(200,json=body)).request("/book/info",bookId="A")
+
+
+def test_upgrade_notice_keeps_valid_data_without_retries_or_exposing_message(root, caplog):
+    upgrade_notice.clear()
+    calls = []
+    def handle(request):
+        calls.append(request)
+        return httpx.Response(200, json={"bookId":"A", "title":"书", "author":"作者",
+                                         "upgrade_info":{"message":"synthetic-private-value"}})
+    try:
+        assert adapter(root, handle).book_info("A").book_id == "A"
+        assert upgrade_notice.is_set()
+        assert len(calls) == 1
+        assert "synthetic-private-value" not in caplog.text
+    finally:
+        upgrade_notice.clear()
+
+
+def test_upgrade_notice_does_not_hide_missing_business_data(root):
+    upgrade_notice.clear()
+    try:
+        with pytest.raises(AppError, match="READ_SCHEMA"):
+            adapter(root, lambda request: httpx.Response(200, json={"upgrade_info": {}})).book_info("A")
+    finally:
+        upgrade_notice.clear()
 
 
 def test_malformed_json_and_timeout(root):
@@ -103,6 +128,7 @@ def test_search_accepts_scope17_and_detail_retains_edition(root):
         value=json.loads(request.content)
         if value["api_name"] == "/store/search":
             assert value["scope"] == 10
+            assert value["context"] == "安娜"
             return httpx.Response(200,json={"results":[{"scope":17,"books":[{"bookInfo":{
                 "bookId":"A","title":"安娜","author":"作者","publisher":"出版社"}}]}]})
         return httpx.Response(200,json={"bookId":"A","title":"安娜","author":"作者","translator":"译者","isbn":"123"})
@@ -116,7 +142,7 @@ def test_shelf_keeps_imported_ids_and_links_without_inventing_type(root):
     def handle(request):
         body = json.loads(request.content)
         calls.append(body)
-        assert body == {"api_name": "/shelf/sync", "skill_version": "1.0.5"}
+        assert body == {"api_name": "/shelf/sync", "skill_version": "1.0.6"}
         return httpx.Response(200, json={"books": [
             {"bookId": "CB_imported_1", "title": "我的导入书", "author": "",
              "readerLink": "https://weread.qq.com/web/reader/importedRoute"},

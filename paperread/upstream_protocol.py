@@ -11,7 +11,7 @@ KEY = '3c5c8717f3daf09iop3423zafeqoi'
 class UpstreamPayload:
 
     def _encode_data(self, data: dict) -> str:
-        pairs = [f'{k}={urllib.parse.quote(str(data[k]), safe='')}' for k in sorted(data.keys())]
+        pairs = [f"{k}={urllib.parse.quote(str(data[k]), safe='')}" for k in sorted(data.keys())]
         return '&'.join(pairs)
 
     def _calculate_hash(self, input_string: str) -> str:
@@ -97,5 +97,5 @@ class UpstreamPayload:
         self.data['rt'] = current_time - last_time if last_time else 0
         self.data['ts'] = int(current_time * 1000) + random.randint(0, 1000)
         self.data['rn'] = random.randint(0, 1000)
-        self.data['sg'] = hashlib.sha256(f'{self.data['ts']}{self.data['rn']}{KEY}'.encode()).hexdigest()
+        self.data['sg'] = hashlib.sha256(f"{self.data['ts']}{self.data['rn']}{KEY}".encode()).hexdigest()
         self.data['s'] = self._calculate_hash(self._encode_data(self.data))

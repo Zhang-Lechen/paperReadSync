@@ -37,7 +37,7 @@ def main() -> int:
                 text=True, encoding="utf-8", errors="replace", timeout=60,
             )
             check = {
-                "command": ".venv\\Scripts\\python " + " ".join(command),
+                "command": sys.executable + " " + " ".join(command),
                 "exit_code": result.returncode,
                 "stdout": redact(result.stdout.strip()),
                 "stderr": redact(result.stderr.strip()),

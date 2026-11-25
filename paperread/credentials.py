@@ -1,4 +1,4 @@
-"""Local-only credentials. Windows blobs use current-user DPAPI and a private ACL."""
+"""Local-only credentials: Windows DPAPI or the macOS login Keychain."""
 
 import ctypes
 from ctypes import wintypes
@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 from pydantic import Field, SecretStr
 
@@ -37,6 +38,8 @@ def app_directory() -> Path:
         if not location:
             raise AppError("PRIVATE_STORAGE", "未找到本地受保护存储位置")
         return Path(location) / "PaperReadSync"
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Application Support" / "PaperReadSync"
     return Path.home() / ".local" / "share" / "paperread-sync"
 
 
@@ -86,6 +89,39 @@ def _dpapi(data: bytes, *, decrypt: bool) -> bytes:
         kernel32.LocalFree(destination.pbData)
 
 
+def _stored_exists(path):
+    if sys.platform == "darwin":
+        from paperread.macos_keychain import access
+        return access(path, exists=True)
+    return path.is_file()
+
+
+def _read_private(path):
+    if sys.platform == "darwin":
+        from paperread.macos_keychain import access
+        return access(path)
+    return _dpapi(path.read_bytes(), decrypt=True)
+
+
+def _save_private(path, raw):
+    if len(raw) > 2_000_000:
+        raise AppError("PRIVATE_STORAGE", "授权数据超过本地存储上限")
+    if sys.platform == "darwin":
+        from paperread.macos_keychain import access
+        access(path, value=raw)
+        return
+    encrypted = _dpapi(raw, decrypt=False)
+    temporary = path.with_suffix(".tmp")
+    try:
+        with temporary.open("wb") as stream:
+            stream.write(encrypted)
+            stream.flush()
+            os.fsync(stream.fileno())
+        temporary.replace(path)
+    except OSError:
+        raise AppError("PRIVATE_STORAGE", "无法保存加密授权数据") from None
+
+
 class CredentialStore:
     def __init__(self, account_id: str, directory: Path | None = None, *, book_id: str | None = None):
         if not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", account_id):
@@ -102,24 +138,18 @@ class CredentialStore:
         payload["wr_skey"] = value.wr_skey.get_secret_value()
         payload["wr_vid"] = value.wr_vid.get_secret_value()
         payload["captured_cookies"] = {key:item.get_secret_value() for key,item in value.captured_cookies.items()}
-        encrypted = _dpapi(json.dumps(payload, ensure_ascii=True).encode(), decrypt=False)
-        temporary = self.path.with_suffix(".tmp")
-        try:
-            temporary.write_bytes(encrypted)
-            temporary.replace(self.path)
-        except OSError:
-            raise AppError("PRIVATE_STORAGE", "无法保存加密凭证") from None
+        _save_private(self.path, json.dumps(payload, ensure_ascii=True).encode())
 
     def load(self) -> WriterCredentials:
         try:
-            if not self.path.exists() and self.book_id:
+            if not _stored_exists(self.path) and self.book_id:
                 legacy = CredentialStore(self.account_id, self.directory).load()
                 # Legacy profiles are valid only when their actual payload ID is
                 # already the canonical ID. Never infer a missing route mapping.
                 if legacy.captured_payload.get("b") != self.book_id:
                     raise AppError("CONTEXT_REQUIRED", "请为这本书点击准备同步上下文")
                 return legacy
-            payload = _dpapi(self.path.read_bytes(), decrypt=True)
+            payload = _read_private(self.path)
             return WriterCredentials.model_validate_json(payload)
         except AppError:
             raise
@@ -145,7 +175,7 @@ def import_upstream_file(path: Path) -> WriterCredentials:
 
 
 class PrivateJsonStore:
-    """Shared current-user DPAPI storage for browser sessions and read API keys."""
+    """OS-protected storage for browser sessions and read API keys."""
 
     def __init__(self, account_id: str, kind: str, directory: Path | None = None):
         if kind not in ("api", "browser") or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", account_id):
@@ -154,29 +184,18 @@ class PrivateJsonStore:
         self.path = self.directory / f"{account_id}.{kind}.dpapi"
 
     def exists(self):
-        return self.path.is_file()
+        return _stored_exists(self.path)
 
     def save(self, value: dict):
         _private_directory(self.directory)
         raw = json.dumps(value, ensure_ascii=True).encode()
-        if len(raw) > 2_000_000:
-            raise AppError("PRIVATE_STORAGE", "授权数据超过本地存储上限")
-        encrypted = _dpapi(raw, decrypt=False)
-        temporary = self.path.with_suffix(".tmp")
-        try:
-            with temporary.open("wb") as stream:
-                stream.write(encrypted)
-                stream.flush()
-                os.fsync(stream.fileno())
-            temporary.replace(self.path)
-        except OSError:
-            raise AppError("PRIVATE_STORAGE", "无法保存加密授权数据") from None
+        _save_private(self.path, raw)
 
     def load(self):
         try:
-            if self.path.stat().st_size > 2_100_000:
+            if sys.platform != "darwin" and self.path.stat().st_size > 2_100_000:
                 raise ValueError()
-            value = json.loads(_dpapi(self.path.read_bytes(), decrypt=True))
+            value = json.loads(_read_private(self.path))
             if not isinstance(value, dict):
                 raise ValueError()
             return value

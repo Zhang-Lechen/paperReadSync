@@ -1,6 +1,6 @@
 # PaperRead Sync
 
-Windows 本地运行的纸质书阅读账本，支持版本确认、阅读记录、官方只读统计、保守核验与小额有界试验。
+Windows / macOS 本地运行的纸质书阅读账本，支持版本确认、阅读记录、官方只读统计、保守核验与小额有界试验。
 按根目录实施计划逐阶段实现，已改为最后统一验收。
 
 2026-11-05 最新实际结果：《孟子译注》纸质记录已核验 **3600 秒**，状态 VERIFIED，剩余 0 秒。
@@ -21,6 +21,12 @@ Windows 本地运行的纸质书阅读账本，支持版本确认、阅读记录
 详情见 [统一验收说明](reports/FINAL_REVIEW.md) 和 [真实试验协议](docs/LIVE_TEST_PROTOCOL.md)。
 
 ## 直接体验
+
+macOS 首次使用请先完成下方安装步骤，然后双击根目录的 **`start.command`**。
+也可在终端运行 `./start.command`，支持 `--no-browser`、`--port 8767` 和 `--check`。
+启动终端窗口需保持打开，停止时先在网页取消进行中的同步并等待停止，再按 **Ctrl+C**。
+Windows 的 `close.cmd` 仅适用于 Windows；macOS 使用启动窗口的 Ctrl+C 停止。
+
 
 Windows 日常启动：双击项目根目录的 **`start.cmd`**。脚本使用本项目已有的 `.venv`，
 启动后自动打开 `http://127.0.0.1:8766`；同一项目已运行时只打开现有页面，不启动第二个服务。
@@ -52,7 +58,7 @@ Windows 日常启动：双击项目根目录的 **`start.cmd`**。脚本使用�
 “待查保留”表示已尝试提交但未能准确核验的额度，暂扣以免重复提交；可提交为 0 仍可能未完成。页面可展开说明并进入条目高级操作进行只读诊断。
 保存会话表单右侧展示已确认的书籍列表，两栏等高，长列表可在右侧滚动；窄屏时上下排列。移除只影响当前账号的新记录选书列表，可恢复；原有阅读记录、核验结果和待查额度保留。
 
-网页登录以当前 Windows 用户 DPAPI 加密保存，重启后复用。真实 Web 服务启动时在后台检查一次，
+网页登录通过当前系统用户的安全存储保存（Windows DPAPI / macOS 钥匙串），重启后复用。真实 Web 服务启动时在后台检查一次，
 准备书籍和每批同步前也会检查；仅会话过期时，先复用同账号的较新本机授权，再尝试一次官网
 `/web/login/renewal` 正常续期，重新校验成功后保存。该过程不发送阅读时长、不改账本或书籍对应关系，
 也不会重发失败的阅读请求。只读 API Key 仍独立保存。
@@ -107,7 +113,7 @@ Mock 与真实数据库严格分离；Mock 终态为 `MOCK_VERIFIED`，不能变
 
 本人在本机取得 `WEREAD_API_KEY`，并准备合法授权的目标书籍上下文；不要把任何凭证发到聊天。
 项目使用独立的本机浏览器授权流程，不会启动被隔离的 WeReadGears 原框架。
-也可以用 CLI `.venv\Scripts\paperread credentials key` 隐藏输入 Key 并以 DPAPI 保存，
+也可以用 CLI `.venv\Scripts\paperread credentials key` 隐藏输入 Key 并以系统安全存储保存，
 `.venv\Scripts\paperread login` 扫码，`.venv\Scripts\paperread prepare ENTRY_UUID` 准备本书上下文。
 
 ```powershell
@@ -148,7 +154,43 @@ Mock 与真实数据库严格分离；Mock 终态为 `MOCK_VERIFIED`，不能变
 
 ## 安装与测试
 
-本次验证环境：Windows / Python 3.12.4。项目声明 Python 3.11+，未声称其他版本已测试。
+项目要求 Python 3.11+。历史验证环境为 Windows / Python 3.12.4。
+
+macOS（Intel / Apple Silicon，使用对应架构的 Python 3.11+）：
+
+```sh
+cd /你的路径/paperReadSync
+python3 -m venv .venv
+.venv/bin/python -m pip install --require-hashes -r requirements.lock
+.venv/bin/python -m pip install --no-deps -e .
+.venv/bin/python scripts/bootstrap_upstream.py
+# 未安装 /Applications 下的 Chrome 或 Edge 时，安装授权流程所需的 Chromium：
+.venv/bin/python -m playwright install chromium
+chmod +x start.command
+./start.command
+```
+
+不要复制 Windows 的 `.venv` 到 Mac；请在 Mac 上重新创建环境。
+macOS 自动检测 `/Applications` 中的 Chrome / Edge，否则使用 Playwright Chromium。
+可用 `PAPERREAD_BROWSER_CHANNEL=chromium ./start.command` 指定浏览器。
+Safari 可浏览本地界面，扫码和上下文捕获使用上述 Chromium 系浏览器。
+首次保存或读取授权时，系统可能请求钥匙串访问权限；请解锁登录钥匙串并允许本机 Python 访问。
+授权直接保存在登录钥匙串的 `PaperReadSync` 服务项中，不在项目内保存明文。
+本机配置目录为 `~/Library/Application Support/PaperReadSync`；账本仍在项目 `data/`。
+Windows DPAPI 凭证不能跨系统解密；迁移账本后需在 Mac 重新连接 Key 和扫码授权。
+网络默认自动适配：后台会话校验、登录续期、统计查询和同步使用环境变量或系统中已配置的代理，无需在本项目选择连接模式。
+支持 HTTP / HTTPS 代理和已配置的 SOCKS5 地址，并遵守系统代理绕过规则；本地 `localhost` / 回环地址始终直连。
+TLS 证书校验保持开启，代理故障不会触发自动直连或重复提交。
+检测到微信读书域名被 HTTP 代理/VPN 解析为 `198.18.0.0/15` Fake-IP 时，后台自动通过 Google DNS-over-HTTPS 查询真实地址（仅发送公共域名），
+让同一代理按真实 IP 建立隧道，仍使用原域名进行 TLS 证书校验；地址按 DNS TTL 缓存，最多 5 分钟。
+macOS 常见的本地 HTTP 代理下，授权浏览器也会自动使用同样的隧道适配；临时中转仅绑定回环地址、要求随机认证，操作结束即关闭，且不解密 HTTPS 内容。
+阅读请求拦截始终保留，不会因此自动发送或重试阅读时长。
+TUN/VPN 的 DNS、路由或节点故障仍需由代理软件处理；仅配置 PAC 脚本的动态规则不在本次自动解析范围内。
+更新此版本后需重启应用，已有服务不会自动加载代码和依赖变更。
+macOS 上下文中的 CLI 命令使用 `.venv/bin/paperread`，文件路径使用 `/`。
+离线回归：`.venv/bin/python -m pytest -q`；诊断：`.venv/bin/paperread doctor`。
+
+Windows：
 
 ```powershell
 python -m venv .venv
@@ -165,7 +207,7 @@ Web 表单测试通过内存 ASGI 传输；Windows asyncio 的内部 socketpair 
 需要更新依赖时审查并运行：
 
 ```powershell
-.venv\Scripts\python -m piptools compile --extra test --extra web --extra browser --generate-hashes --strip-extras --no-emit-index-url --output-file requirements.lock pyproject.toml
+uv pip compile pyproject.toml --extra test --extra web --extra browser --python-version 3.11 --universal --generate-hashes --no-emit-index-url --output-file requirements.lock
 ```
 
 ## 文件与安全边界
@@ -178,7 +220,8 @@ Web 表单测试通过内存 ASGI 传输；Windows asyncio 的内部 socketpair 
 - `upstream.lock.json` 与 `patches/`：原上游隔离仍生效；纯协议提取代码保留 MIT 许可。
 
 真实写入凭证使用当前 Windows 用户的 DPAPI 和私有 ACL，位置在本机 LocalAppData；
-API Key 优先读取当前进程环境，否则读取本机 DPAPI 存储。Git 忽略 `.env`、data、shared、日志、vendor 和虚拟环境。
+macOS 的 API Key、网页登录和写入凭证保存在当前用户登录钥匙串中。
+API Key 优先读取当前进程环境，否则读取本机系统安全存储。Git 忽略 `.env`、data、shared、日志、vendor 和虚拟环境。
 原凭证 JSON 导入后不会自动删除，需由本人自行保管。不要把受保护数据、抓包或 Cookie 放进报告。
 
 真实网页直接同步要求一次性书目/额度预览和本人勾选实际阅读、同账号及暂停其他活动，

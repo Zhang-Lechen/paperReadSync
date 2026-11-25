@@ -2,7 +2,7 @@
 
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-import sys
+from paperread.browser_session import _channel
 from urllib.parse import urlparse
 
 import httpx
@@ -14,7 +14,6 @@ from paperread.models import Book, EntryInput
 from paperread.web import create_app
 
 
-@pytest.mark.skipif(sys.platform != "win32", reason="Uses the installed Windows Edge browser")
 def test_return_from_diagnosis_restores_ledger_view(root, tmp_path, monkeypatch):
     playwright = pytest.importorskip("playwright.sync_api")
     settings = Settings(root, tmp_path / "navigation.sqlite", "default", False, False)
@@ -50,9 +49,9 @@ def test_return_from_diagnosis_restores_ledger_view(root, tmp_path, monkeypatch)
     try:
         with ThreadPoolExecutor(max_workers=1) as executor, playwright.sync_playwright() as engine:
             try:
-                browser = engine.chromium.launch(channel="msedge", headless=True)
+                browser = engine.chromium.launch(channel=_channel(), headless=True)
             except playwright.Error as exc:
-                pytest.skip(f"Edge unavailable: {exc}")
+                pytest.skip(f"Chromium browser unavailable: {exc}")
             try:
                 page = browser.new_page(viewport={"width":1280, "height":800})
                 errors = []
@@ -130,7 +129,6 @@ def test_return_from_diagnosis_restores_ledger_view(root, tmp_path, monkeypatch)
         app.state.operations.jobs.shutdown()
 
 
-@pytest.mark.skipif(sys.platform != "win32", reason="Uses the installed Windows Edge browser")
 def test_book_list_matches_form_height_and_stacks_on_mobile(root, tmp_path):
     playwright = pytest.importorskip("playwright.sync_api")
     settings = Settings(root, tmp_path / "book-layout.sqlite", "default", False, False)
@@ -151,9 +149,9 @@ def test_book_list_matches_form_height_and_stacks_on_mobile(root, tmp_path):
     try:
         with ThreadPoolExecutor(max_workers=1) as executor, playwright.sync_playwright() as engine:
             try:
-                browser = engine.chromium.launch(channel="msedge", headless=True)
+                browser = engine.chromium.launch(channel=_channel(), headless=True)
             except playwright.Error as exc:
-                pytest.skip(f"Edge unavailable: {exc}")
+                pytest.skip(f"Chromium browser unavailable: {exc}")
             try:
                 page = browser.new_page(viewport={"width":1280, "height":1000})
                 errors = []

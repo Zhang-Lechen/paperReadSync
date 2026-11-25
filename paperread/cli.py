@@ -457,7 +457,7 @@ app.add_typer(credentials_app, name="credentials")
 @credentials_app.command(name="import")
 @checked
 def import_credentials(ctx: typer.Context, path: Path):
-    """本机读取已授权 JSON，使用 Windows 当前用户 DPAPI 加密保存；不回显。"""
+    """本机读取已授权 JSON，使用当前用户的系统安全存储保存；不回显。"""
     from paperread.credentials import CredentialStore, import_upstream_file
     if ctx.obj.mock:
         raise AppError("MODE_CONFLICT", "Mock 模式不需要真实凭证")

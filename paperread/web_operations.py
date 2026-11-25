@@ -60,10 +60,11 @@ class WebOperations:
             self.session_status = "登录检查未完成；使用前将再次检查"
 
     def connection_status(self):
+        from paperread.official_stats import upgrade_notice
         key = read_key_status(self.settings.account)
         return {"key": key["available"], "key_status":key,
                 "browser": PrivateJsonStore(self.settings.account, "browser").exists(),
-                "session_status":self.session_status}
+                "session_status":self.session_status, "upgrade_notice": upgrade_notice.is_set()}
 
     def offer(self, entry, purpose, *, preview=None):
         seconds = preview["seconds"] if preview else (min(60, entry["available_seconds"]) if purpose == "probe" else entry["available_seconds"])
